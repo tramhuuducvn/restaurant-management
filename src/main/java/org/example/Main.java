@@ -3,6 +3,8 @@ package org.example;
 
 import org.example.controller.BillOrderController;
 import org.example.controller.MenuItemController;
+import org.example.service.BillOrderService;
+import org.example.service.MenuItemService;
 
 import java.io.File;
 
@@ -16,7 +18,8 @@ public class Main {
 //        catch (Exception exception){
 //
 //        }
-        MenuItemController billOrderController = new MenuItemController();
-        MenuItemController billOrderController1 = new MenuItemController();
+//        MenuItemController billOrderController = new MenuItemController();
+//        MenuItemController billOrderController1 = new MenuItemController();
+        MenuItemService menuItemService = MenuItemService.getInstance();
     }
 }

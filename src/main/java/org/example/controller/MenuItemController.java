@@ -10,7 +10,7 @@ public class MenuItemController {
 
     static {
         System.out.println("Hello MenuItemService");
-        menuItemService = new MenuItemService();
+        menuItemService = MenuItemService.getInstance();
     }
     //    Create Menu Item
     public void createMenuItem(MenuItem menuItem){
