@@ -18,5 +18,18 @@ public class MenuItem  {
     private String description;
     private String image;
     private double price;
-    private List<String> additionalDetail;
+    private String types;
+
+    public MenuItem(String name, String description, String image, double price, String additionalDetail) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.price = price;
+        this.types = additionalDetail;
+    }
+
+    public String toCSV() {
+        //Name, Description, Image, Price, Types
+        return  this.name + ", " + this.description + ", " + this.image + ", " + this.price + ", " + this.types;
+    }
 }
