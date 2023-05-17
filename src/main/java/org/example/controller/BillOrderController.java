@@ -1,14 +1,38 @@
 package org.example.controller;
 
 import org.example.entity.BillOrder;
+import org.example.entity.MenuItem;
+import org.example.service.BillOrderService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BillOrderController {
-    // Create bill order
-    public void createBillOrder(BillOrder billOrder){
+    private BillOrderService billOrderService;
 
+    public BillOrderController(){
+        billOrderService = BillOrderService.getInstance();
     }
-    // Retrieve bill order
-    public void getBillOrder(){
 
+    // Create bill order
+    public boolean createBillOrder(BillOrder billOrder) {
+        return billOrderService.createBillOrder(billOrder);
+    }
+
+    // Retrieve bill order
+    public List<BillOrder> getBillOrderByNumber(int billNumber){
+        return billOrderService.getBillOrderByNumber(billNumber);
+    }
+
+    public List<MenuItem> getMenuItemByBillNumber(int billNumber){
+        return billOrderService.getMenuItemByBillNumber(billNumber);
+    }
+
+    public boolean removeBillItem(int billNumber, String name){
+        return billOrderService.removeBillItem(billNumber, name);
+    }
+
+    public double calculateBillOrder(int billNumber) {
+        return billOrderService.calculateBillOrder(billNumber);
     }
 }

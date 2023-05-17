@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.List;
 
 @Setter
 @Getter
@@ -20,12 +18,16 @@ public class MenuItem  {
     private double price;
     private String types;
 
-    public MenuItem(String name, String description, String image, double price, String additionalDetail) {
-        this.name = name;
-        this.description = description;
-        this.image = image;
+    public MenuItem(String name, String description, String image, double price, String types) {
+        this.name = name.replaceAll(",", "");;
+        this.description = description.replaceAll(",", "");
+        this.image = image.replaceAll(",", "");;
         this.price = price;
-        this.types = additionalDetail;
+        this.types = types.replaceAll(",", "");;
+    }
+
+    public String getContent() {
+        return this.name + " " + this.description + " " + this.getTypes();
     }
 
     public String toCSV() {

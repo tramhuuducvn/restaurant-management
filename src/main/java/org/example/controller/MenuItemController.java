@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.example.entity.MenuItem;
 import org.example.service.MenuItemService;
 
@@ -12,7 +11,6 @@ public class MenuItemController {
     private static MenuItemService menuItemService;
 
     static {
-        System.out.println("Hello MenuItemService");
         menuItemService = MenuItemService.getInstance();
     }
     //    Create Menu Item

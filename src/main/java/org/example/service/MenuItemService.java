@@ -1,26 +1,21 @@
 package org.example.service;
 
 import org.example.entity.MenuItem;
-import org.example.repository.BillOrderRepo;
-import org.example.repository.MenuItemRepo;
+import org.example.repository.MenuItemRepository;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
+// Singleton Design
 public class MenuItemService {
     private static final MenuItemService instance;
-    private static final MenuItemRepo repo;
-    private List<MenuItem> menuItems;
+    private static final MenuItemRepository repo;
+    private static List<MenuItem> menuItems;
 
     static {
         try {
-            repo = MenuItemRepo.getInstance();
+            repo = MenuItemRepository.getInstance();
             instance = new MenuItemService();
         }
         catch (RuntimeException e){
@@ -38,26 +33,48 @@ public class MenuItemService {
 
     //Tools
     public int findIndex(int id){
-        return IntStream.range(0, menuItems.size()).filter(item -> id == menuItems.get(item).getItemId()).findFirst().getAsInt();
+        try {
+            return IntStream.range(0, menuItems.size()).filter(item -> id == menuItems.get(item).getItemId()).findFirst().getAsInt();
+        }
+        catch (NoSuchElementException e){
+//            throw new NoSuchElementException(e.getMessage());
+            return -1;
+        }
     }
 
-    //CRUD
     public boolean createMenuItem(MenuItem menuItem){
-       return menuItems.add(menuItem);
+        for (MenuItem item: menuItems) {
+            if(item.getName().equals(menuItem.getName())){
+                return false;
+            }
+        }
+        menuItem.setItemId(menuItems.size());
+        menuItems.add(menuItem);
+        this.saveToFile();
+        return true;
     }
 
     public MenuItem findMenuItemById(int id){
         return menuItems.stream().filter(item -> item.getItemId() == id).findFirst().orElse(null);
     }
 
+    public MenuItem findMenuItemByName(String name){
+        return menuItems.stream().filter(item -> item.getName().equals(name)).findFirst().orElse(null);
+    }
+
     public void updateMenuItemById(int id, MenuItem item) {
         int index = this.findIndex(id);
+        if(index < 0) return;
         item.setItemId(id);
         menuItems.set(index, item);
+        this.saveToFile();
     }
 
     public boolean deleteMenuItemById(int id){
-        MenuItem obj = menuItems.remove(this.findIndex(id));
+        int index = this.findIndex(id);
+        if(index < 0) return false;
+        MenuItem obj = menuItems.remove(index);
+        this.saveToFile();
         return obj == null;
     }
 
@@ -68,5 +85,11 @@ public class MenuItemService {
     public List<MenuItem> search(String keywords){
         return null;
     }
+    public void saveToFile(){
+        repo.writeAll(menuItems);
+    }
 
+    public void clearAll(){
+        menuItems.clear();
+    }
 }
