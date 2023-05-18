@@ -11,57 +11,67 @@ import java.util.stream.IntStream;
 
 // Singleton Design
 public class BillOrderService {
-    private static BillOrderRepository billOrderRepo;
-    private static BillOrderService instance;
-    private List<BillOrder> billOrders;
+    private static final BillOrderRepository billOrderRepo;
+    private static final BillOrderService instance;
 
     static {
         try {
             billOrderRepo = BillOrderRepository.getInstance();
             instance = new BillOrderService();
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private BillOrderService(){
+    private final List<BillOrder> billOrders;
+
+    private BillOrderService() {
         billOrders = billOrderRepo.readBillOrder();
     }
-    
-    public static BillOrderService getInstance(){
+
+    public static BillOrderService getInstance() {
         return instance;
     }
 
-    public boolean createBillOrder(BillOrder billOrder){
-        if(billOrder == null){
+    public boolean createBillOrder(BillOrder billOrder) {
+        if (billOrder == null || billOrder.getItem() == null) {
             return false;
         }
+
+        int existedBillIndex = this.findIndexItem(billOrder.getBillNumber(), billOrder.getItem().getName());
+        if (existedBillIndex >= 0) {
+            return this.updateQuantitiesItem(billOrder.getBillNumber(), billOrder.getItem().getName(), billOrder.getQuantities() + billOrders.get(existedBillIndex).getQuantities());
+        }
+
         boolean result = billOrders.add(billOrder);
         this.saveToFile();
         return result;
     }
 
-    public List<BillOrder> getBillOrderByNumber(int billNumber){
-        return billOrders.stream().filter(item->item.getBillNumber() == billNumber).collect(Collectors.toList());
+    public List<BillOrder> getAllBillOrder() {
+        return billOrders;
     }
 
-    public List<MenuItem> getMenuItemByBillNumber(int billNumber){
-        return billOrders.stream().filter(item->item.getBillNumber() == billNumber).map(BillOrder::getItem).collect(Collectors.toList());
+
+    public List<BillOrder> getBillOrderByNumber(int billNumber) {
+        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).collect(Collectors.toList());
+    }
+
+    public List<MenuItem> getMenuItemByBillNumber(int billNumber) {
+        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).map(BillOrder::getItem).collect(Collectors.toList());
     }
 
     private int findIndexItem(int billNumber, String name) {
         try {
             return IntStream.range(0, billOrders.size()).filter(item -> (billNumber == billOrders.get(item).getBillNumber() && name.equals(billOrders.get(item).getItem().getName()))).findFirst().getAsInt();
-        }
-        catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return -1;
         }
     }
 
-    public boolean updateQuantitiesItem(int billNumber, String name, int quantity){
-        int index =  this.findIndexItem(billNumber, name);
-        if(index < 0) {
+    public boolean updateQuantitiesItem(int billNumber, String name, int quantity) {
+        int index = this.findIndexItem(billNumber, name);
+        if (index < 0) {
             return false;
         }
         BillOrder billOrder = billOrders.get(index);
@@ -71,9 +81,9 @@ public class BillOrderService {
         return result;
     }
 
-    public boolean removeBillItem(int billNumber, String name){
-        int index =  this.findIndexItem(billNumber, name);
-        if(index < 0) {
+    public boolean removeBillItem(int billNumber, String name) {
+        int index = this.findIndexItem(billNumber, name);
+        if (index < 0) {
             return false;
         }
         boolean result = billOrders.remove(index) != null;
@@ -82,14 +92,25 @@ public class BillOrderService {
     }
 
     public double calculateBillOrder(int billNumber) {
-       return billOrders.stream().filter(item->item.getBillNumber() == billNumber).map(BillOrder::getTotalPrice).reduce(0.0, (a, b)->a+b);
+        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).map(BillOrder::getTotalPrice).reduce(0.0, (a, b) -> a + b);
     }
 
-    public void saveToFile(){
+    public void saveToFile() {
         billOrderRepo.writeAll(billOrders);
     }
 
-    public void clearAll(){
+    public void clearAll() {
         billOrders.clear();
+    }
+
+    public void printBillOrder(int billNumber) {
+        List<BillOrder> list = this.getBillOrderByNumber(billNumber);
+        double totalBill = 0;
+        System.out.println("\n------------------ Bill Order #" + billNumber + " ------------------");
+        for (BillOrder item : list) {
+            totalBill += item.getTotalPrice();
+            System.out.println(item.getItem().getName() + " --- " + item.getQuantities() + " --- " + item.getTotalPrice());
+        }
+        System.out.println("\n------------------ Total Price #" + billNumber + " = " + totalBill + "------------------");
     }
 }

@@ -14,6 +14,9 @@ public class Main {
 
 
     public static void main(String[] args) {
+        System.out.println("\n MenuManagement Run Demo");
         MenuManagement.runDemo();
+        System.out.println("\n BillOrderManagement Run Demo");
+        BillOrderManagement.runDemo();
     }
 }

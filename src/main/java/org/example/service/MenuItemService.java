@@ -40,7 +40,6 @@ public class MenuItemService {
             return IntStream.range(0, menuItems.size()).filter(item -> id == menuItems.get(item).getItemId()).findFirst().getAsInt();
         }
         catch (NoSuchElementException e){
-//            throw new NoSuchElementException(e.getMessage());
             return -1;
         }
     }

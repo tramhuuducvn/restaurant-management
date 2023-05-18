@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.entity.BillOrder;
+import org.example.entity.MenuItem;
 import org.example.service.MenuItemService;
 import org.example.utils.DateTimeHelper;
 
@@ -44,7 +45,11 @@ public class BillOrderRepository {
             return null;
         }
         MenuItemService menuItemService = MenuItemService.getInstance();
-        return new BillOrder(Integer.valueOf(values[0]), menuItemService.findMenuItemByName(values[1]), Integer.valueOf(values[2]), DateTimeHelper.getDateFromText(values[3]));
+        MenuItem newItem = menuItemService.findMenuItemByName(values[1]);
+        if(newItem == null){
+            return null;
+        }
+        return new BillOrder(Integer.parseInt(values[0]), newItem, Integer.parseInt(values[2]), DateTimeHelper.getDateFromText(values[3]));
     }
 
     public List<BillOrder> readBillOrder(){
@@ -54,7 +59,14 @@ public class BillOrderRepository {
 
             String line = "";
             while((line = bufferedReader.readLine()) != null){
-                String[] values = line.split(",");
+                String[] values = line.split(", ");
+                if(values[0].equals("Bill")){
+                    continue;
+                }
+                BillOrder newBill = this.createBillOrder(values);
+                if(newBill == null) {
+                    continue;
+                }
                 billOrders.add(this.createBillOrder(values));
             }
             bufferedReader.close();

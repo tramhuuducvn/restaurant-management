@@ -20,6 +20,11 @@ public class BillOrderController {
     }
 
     // Retrieve bill order
+
+    public List<BillOrder> getAllBillOrder(){
+        return billOrderService.getAllBillOrder();
+    }
+
     public List<BillOrder> getBillOrderByNumber(int billNumber){
         return billOrderService.getBillOrderByNumber(billNumber);
     }
@@ -28,11 +33,19 @@ public class BillOrderController {
         return billOrderService.getMenuItemByBillNumber(billNumber);
     }
 
+    public boolean updateQuantitiesItem(int billNumber, String name, int quantity){
+        return billOrderService.updateQuantitiesItem(billNumber, name, quantity);
+    }
+
     public boolean removeBillItem(int billNumber, String name){
         return billOrderService.removeBillItem(billNumber, name);
     }
 
     public double calculateBillOrder(int billNumber) {
         return billOrderService.calculateBillOrder(billNumber);
+    }
+
+    public void printBillOrder(int billNumber) {
+        billOrderService.printBillOrder(billNumber);
     }
 }

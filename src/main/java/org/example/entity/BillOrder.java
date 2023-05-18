@@ -30,4 +30,9 @@ public class BillOrder {
     public String toCSV() {
         return  billNumber + ", " + item.getName() + ", " + quantities + ", " + orderedTime.toString() + ", " + item.getTypes();
     }
+
+    @Override
+    public String toString() {
+        return  billNumber + ", " + item.getName() + ", " + quantities + ", " + orderedTime.toString() + ", " + item.getTypes();
+    }
 }
