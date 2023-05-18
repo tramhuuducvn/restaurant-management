@@ -1,7 +1,7 @@
 package org.example.constant;
 
 public enum SearchMenuType {
-    COMMON,
+    ALL,
     NAME,
     DESCRIPTION,
     TYPES,

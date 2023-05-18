@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.AllArgsConstructor;
+import org.example.constant.SearchMenuType;
 import org.example.entity.MenuItem;
 import org.example.service.MenuItemService;
 
@@ -21,9 +22,13 @@ public class MenuItemController {
     public MenuItem findMenuItemById(int id){
         return menuItemService.findMenuItemById(id);
     }
-    // Update Menu Item
+    // Update Menu Item by Id
     public void updateMenuItemById(int id, MenuItem menuItem) {
         menuItemService.updateMenuItemById(id, menuItem);
+    }
+    // Update Menu Item by Name
+    public void updateMenuItemByName(String name, MenuItem menuItem) {
+        menuItemService.updateMenuItemByName(name, menuItem);
     }
     // Delete Menu Item
     public void deleteMenuItemById(int id){
@@ -37,6 +42,6 @@ public class MenuItemController {
 
     // Searching Item
     public List<MenuItem> search(String keywords){
-        return menuItemService.search(keywords);
+        return menuItemService.search(keywords, SearchMenuType.ALL);
     }
 }

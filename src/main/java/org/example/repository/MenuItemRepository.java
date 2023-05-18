@@ -71,10 +71,8 @@ public class MenuItemRepository {
 
     public void writeAll(List<MenuItem> data){
         if(data == null) {
-            System.out.println("@DUKE: List<MenuItem> data NULL");
             return;
         }
-        System.out.println("@DUKE: List<MenuItem> data NOT NULL: " + data);
 
         try {
             PrintWriter printWriter = new PrintWriter(file);

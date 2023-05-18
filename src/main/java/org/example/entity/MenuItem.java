@@ -34,4 +34,9 @@ public class MenuItem  {
         //Name, Description, Image, Price, Types
         return  this.name + ", " + this.description + ", " + this.image + ", " + this.price + ", " + this.types;
     }
+
+    @Override
+    public String toString(){
+        return  this.name + ", " + this.description + ", " + this.image + ", " + this.price + ", " + this.types;
+    }
 }

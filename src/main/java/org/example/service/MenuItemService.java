@@ -1,10 +1,14 @@
 package org.example.service;
 
+import org.example.constant.SearchMenuType;
 import org.example.entity.MenuItem;
 import org.example.repository.MenuItemRepository;
+import org.example.utils.Helper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // Singleton Design
@@ -31,13 +35,21 @@ public class MenuItemService {
         return instance;
     }
 
-    //Tools
-    public int findIndex(int id){
+    public int findIndexById(int id){
         try {
             return IntStream.range(0, menuItems.size()).filter(item -> id == menuItems.get(item).getItemId()).findFirst().getAsInt();
         }
         catch (NoSuchElementException e){
 //            throw new NoSuchElementException(e.getMessage());
+            return -1;
+        }
+    }
+
+    public int findIndexByName(String name){
+        try {
+            return IntStream.range(0, menuItems.size()).filter(item -> name.equals(menuItems.get(item).getName())).findFirst().getAsInt();
+        }
+        catch (NoSuchElementException e){
             return -1;
         }
     }
@@ -63,27 +75,55 @@ public class MenuItemService {
     }
 
     public void updateMenuItemById(int id, MenuItem item) {
-        int index = this.findIndex(id);
-        if(index < 0) return;
+        int index = this.findIndexById(id);
+        if(index < 0) {
+            return;
+        }
         item.setItemId(id);
         menuItems.set(index, item);
         this.saveToFile();
     }
 
+    public void updateMenuItemByName(String name, MenuItem item) {
+        int existedName = this.findIndexByName(item.getName());
+        if(existedName >= 0){
+            return;
+        }
+        int index = this.findIndexByName(name);
+        if(index < 0) {
+            return;
+        }
+        item.setItemId(menuItems.get(index).getItemId());
+        menuItems.set(index, item);
+        this.saveToFile();
+    }
+
     public boolean deleteMenuItemById(int id){
-        int index = this.findIndex(id);
+        int index = this.findIndexById(id);
         if(index < 0) return false;
         MenuItem obj = menuItems.remove(index);
         this.saveToFile();
         return obj == null;
     }
 
+    public boolean deleteMenuItemByName(String name){
+        int index = this.findIndexByName(name);
+        if(index < 0) return false;
+        MenuItem obj = menuItems.remove(index);
+        this.saveToFile();
+        return obj == null;
+    }
     public List<MenuItem> getMenuItems(){
         return menuItems;
     }
 
-    public List<MenuItem> search(String keywords){
-        return null;
+    public List<MenuItem> search(String keywords, SearchMenuType searchMenuType){
+        switch (searchMenuType){
+            case ALL:
+                return menuItems.stream().filter(item -> Helper.containKeyword(item.getContent(), keywords)).collect(Collectors.toList());
+            default:
+                return null;
+        }
     }
     public void saveToFile(){
         repo.writeAll(menuItems);
