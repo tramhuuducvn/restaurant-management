@@ -21,4 +21,10 @@ public class HelperTest {
 
         Assert.assertFalse(result);
     }
+
+    @Test
+    public void getInputDouble() {
+        double result = Helper.getInputDouble("Enter your price", "Invalid value, please try again");
+        Assert.assertEquals(9.9, result);
+    }
 }

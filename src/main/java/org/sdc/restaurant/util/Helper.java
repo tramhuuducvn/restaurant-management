@@ -2,6 +2,9 @@ package org.sdc.restaurant.util;
 
 import org.sdc.restaurant.constant.SpecialCharacters;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class Helper {
     /**
      * Search each word in the given keywords param
@@ -22,5 +25,48 @@ public class Helper {
         }
 
         return false;
+    }
+
+    public static double getInputDouble(String message, String errorMessage){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+        while (true){
+            try {
+                return scanner.nextDouble();
+            }
+            catch (InputMismatchException exception){
+                System.out.println(errorMessage);
+                scanner.nextLine();
+            }
+        }
+    }
+
+    public static String getInputString(String message, String errorMessage) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+        while (true){
+            try {
+                return scanner.nextLine();
+            }
+            catch (InputMismatchException e){
+                System.out.println(errorMessage);
+                scanner.nextLine();
+            }
+        }
+    }
+
+    public static int getInputInteger(String message, String errorMessage) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+
+        while (true){
+            try {
+                return scanner.nextInt();
+            }
+            catch (InputMismatchException e){
+                System.out.println(errorMessage);
+                scanner.nextLine();
+            }
+        }
     }
 }
