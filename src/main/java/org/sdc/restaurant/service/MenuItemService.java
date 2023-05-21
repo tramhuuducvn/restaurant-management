@@ -50,11 +50,12 @@ public class MenuItemService {
     }
 
     public MenuItem create(MenuItem menuItem) {
-//        for (MenuItem item : menuItems) {
-//            if (item.getName().equals(menuItem.getName())) {
-//                return null;
-//            }
-//        }
+        for (MenuItem item : menuItems) {
+            if (item.getName().equals(menuItem.getName())) {
+                System.out.println("Can't create new dish because the name has existed!");
+                return null;
+            }
+        }
         menuItem.setItemId(menuItems.size());
         menuItems.add(menuItem);
         return menuItem;

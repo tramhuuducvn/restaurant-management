@@ -95,11 +95,6 @@ public class MenuItemController {
         return menuItemService.getAll();
     }
 
-    /**
-     * @param keywords       - what you want to search
-     * @param searchMenuType - filter: that mean what type you want to search (ex: search by name, by description).
-     * @return list of menu item match with keywords.
-     */
     public void search() {
         System.out.println("Which type you want to search?");
 
@@ -113,6 +108,7 @@ public class MenuItemController {
         String keywords = Helper.getInputString("Enter your keywords: ", "Invalid value, please try again: ");
 
         List<MenuItem> result;
+
         switch (type) {
             case 1:
                 result = menuItemService.search(keywords, SearchMenuType.ALL);

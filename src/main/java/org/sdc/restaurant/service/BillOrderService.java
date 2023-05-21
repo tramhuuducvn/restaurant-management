@@ -43,15 +43,13 @@ public class BillOrderService {
             return this.updateQuantitiesItem(billOrder.getBillNumber(), billOrder.getItem().getName(), billOrder.getQuantities() + billOrders.get(existedBillIndex).getQuantities());
         }
 
-        boolean result = billOrders.add(billOrder);
-        this.saveToFile();
-        return result;
+        return billOrders.add(billOrder);
     }
 
     public List<BillOrder> getAll() {
         return billOrders;
     }
-    
+
     public List<BillOrder> getByNumber(int billNumber) {
         return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).collect(Collectors.toList());
     }
@@ -62,7 +60,10 @@ public class BillOrderService {
 
     private int findIndexItem(int billNumber, String name) {
         try {
-            return IntStream.range(0, billOrders.size()).filter(item -> (billNumber == billOrders.get(item).getBillNumber() && name.equals(billOrders.get(item).getItem().getName()))).findFirst().getAsInt();
+            MenuItemService menuItemService = MenuItemService.getInstance();
+            MenuItem dish = menuItemService.findByName(name);
+            System.out.println(name + " - " + dish.getName());
+            return IntStream.range(0, billOrders.size()).filter(item -> (billNumber + 1 == billOrders.get(item).getBillNumber() && name.equals(dish.getName()))).findFirst().getAsInt();
         } catch (NoSuchElementException e) {
             return -1;
         }
@@ -71,13 +72,13 @@ public class BillOrderService {
     public boolean updateQuantitiesItem(int billNumber, String name, int quantity) {
         int index = this.findIndexItem(billNumber, name);
         if (index < 0) {
+            System.out.println("Index: " + index);
             return false;
         }
+        System.out.println("Index: " + index);
         BillOrder billOrder = billOrders.get(index);
         billOrder.setQuantities(quantity);
-        boolean result = billOrders.set(index, billOrder) != null;
-        this.saveToFile();
-        return result;
+        return billOrders.set(index, billOrder) != null;
     }
 
     public boolean remove(int billNumber, String name) {
@@ -85,9 +86,8 @@ public class BillOrderService {
         if (index < 0) {
             return false;
         }
-        boolean result = billOrders.remove(index) != null;
-        this.saveToFile();
-        return result;
+
+        return billOrders.remove(index) != null;
     }
 
     public double calculateTotalPrice(int billNumber) {
@@ -104,12 +104,16 @@ public class BillOrderService {
 
     public void printBillOrder(int billNumber) {
         List<BillOrder> list = this.getByNumber(billNumber);
+        if (list.size() < 1) {
+            return;
+        }
+
         double totalBill = 0;
         System.out.println("\n------------------ Bill Order #" + billNumber + " ------------------");
         for (BillOrder item : list) {
             totalBill += item.getTotalPrice();
-            System.out.println(item.getItem().getName() + " --- " + item.getQuantities() + " --- " + item.getTotalPrice());
+            System.out.println("Dish: " + item.getItem().getName() + ", quantities: " + item.getQuantities() + ", total price: " + item.getTotalPrice());
         }
-        System.out.println("\n------------------ Total Price #" + billNumber + " = " + totalBill + "------------------");
+        System.out.println("### Total Price of bill #" + billNumber + " is: " + totalBill);
     }
 }
