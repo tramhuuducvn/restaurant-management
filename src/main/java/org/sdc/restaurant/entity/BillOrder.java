@@ -11,35 +11,43 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class BillOrder {
-    private int billNumber;
+    private int billId;
     private MenuItem item;
     private int quantities;
     private Date orderedTime;
     private double totalPrice;
 
-    public BillOrder(int billNumber, MenuItem item, int quantities, Date orderedTime) {
-        this.billNumber = billNumber;
+    public BillOrder(int billId, MenuItem item, int quantities, Date orderedTime) {
+        this.billId = billId;
         this.item = item;
         this.quantities = quantities;
         this.orderedTime = orderedTime;
     }
 
+    /**
+     * 
+     * @return total price of bill item
+     */
     public double getTotalPrice() {
-        return item.getPrice()*quantities;
+        return item.getPrice() * quantities;
     }
 
     public String toCSV() {
-        return  billNumber + SpecialCharacters.COMMA_SPACE + item.getName() + SpecialCharacters.COMMA_SPACE + quantities + SpecialCharacters.COMMA_SPACE + orderedTime.toString() + SpecialCharacters.COMMA_SPACE + item.getTypes();
+        return billId + SpecialCharacters.COMMA_SPACE + item.getName() + SpecialCharacters.COMMA_SPACE + quantities
+                + SpecialCharacters.COMMA_SPACE + orderedTime.toString() + SpecialCharacters.COMMA_SPACE
+                + item.getTypes();
     }
 
     @Override
     public String toString() {
-        return  billNumber + SpecialCharacters.COMMA_SPACE + item.getName() + SpecialCharacters.COMMA_SPACE + quantities + SpecialCharacters.COMMA_SPACE + orderedTime.toString() + SpecialCharacters.COMMA_SPACE + item.getTypes();
+        return billId + SpecialCharacters.COMMA_SPACE + item.getName() + SpecialCharacters.COMMA_SPACE + quantities
+                + SpecialCharacters.COMMA_SPACE + orderedTime.toString() + SpecialCharacters.COMMA_SPACE
+                + item.getTypes();
     }
 
     @Override
     public boolean equals(Object obj) {
         BillOrder target = (BillOrder) obj;
-        return this.billNumber == target.billNumber && this.item.equals(target.item);// && this.quantities == target.quantities;
+        return this.billId == target.billId && this.item.equals(target.item);// && this.quantities == target.quantities;
     }
 }

@@ -36,15 +36,25 @@ public class MenuItemRepository {
         return instance;
     }
 
+    /**
+     * Create menu item from raw data
+     * @param id id of menu item
+     * @param values raw data
+     * @return
+     */
     private MenuItem createMenuItem(int id, String[] values){
-        //Name, Description, Image, Price, Types
-        if(values.length != 5) {
+        //Name, Description, Image, Price, Types, Deleted
+        if(values.length != 6) {
             return null;
         }
-        return new MenuItem(id, values[0], values[1], values[2], Double.parseDouble(values[3]) , values[4]);
+        return new MenuItem(id, values[0], values[1], values[2], Double.parseDouble(values[3]) , values[4], Boolean.parseBoolean(values[5]));
     }
 
-    public List<MenuItem> readMenuItems(){
+    /**
+     * Import data from file csv and convert it to MenuItem Object.
+     * @return list of menu item.
+     */
+    public List<MenuItem> readMenuItems() {
         try {
             List<MenuItem> menuItems = new ArrayList<>();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -68,14 +78,17 @@ public class MenuItemRepository {
         }
     }
 
+    /**
+     * Export all menu item to file csv
+     * @param data list of menu item
+     */
     public void writeAll(List<MenuItem> data){
         if(data == null) {
             return;
         }
-
         try {
             PrintWriter printWriter = new PrintWriter(file);
-            printWriter.println("Name, Description, Image, Price, Types");
+            printWriter.println("Name, Description, Image, Price, Types, Deleted");
             data.stream().map(MenuItem::toCSV).forEach(printWriter::println);
             printWriter.flush();
             printWriter.close();

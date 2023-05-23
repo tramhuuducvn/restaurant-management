@@ -27,4 +27,11 @@ public class HelperTest {
         double result = Helper.getInputDouble("Enter your price", "Invalid value, please try again");
         Assert.assertEquals(9.9, result);
     }
+
+    @Test
+    public void removeSpacesAndCommas(){
+        String target = "Hello World!";
+        String actual = Helper.reformatText("Hello   ,   World!");
+        Assert.assertEquals(target, actual);
+    }
 }

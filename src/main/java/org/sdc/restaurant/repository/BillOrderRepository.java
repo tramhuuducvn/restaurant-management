@@ -21,7 +21,6 @@ public class BillOrderRepository {
         catch (RuntimeException e){
             throw new RuntimeException("Exception occurred in creating singleton object");
         }
-
     }
 
     private BillOrderRepository(){
@@ -59,6 +58,10 @@ public class BillOrderRepository {
         return new BillOrder(Integer.parseInt(values[0]), newItem, Integer.parseInt(values[2]), DateTimeHelper.getDateFromText(values[3]));
     }
 
+    /**
+     * Import data from file csv and convert it to MenuItem Object.
+     * @return list of menu item.
+     */
     public List<BillOrder> readBillOrder(){
         try {
             List<BillOrder> billOrders = new ArrayList<>();
@@ -67,7 +70,7 @@ public class BillOrderRepository {
             String line;
             while((line = bufferedReader.readLine()) != null){
                 String[] values = line.split(SpecialCharacters.COMMA_SPACE);
-                if(values[0].equals("Bill")){
+                if(values[0].equals("Bill Number")){
                     continue;
                 }
                 BillOrder newBill = this.createBillOrder(values);
@@ -83,7 +86,10 @@ public class BillOrderRepository {
             return new ArrayList<>();
         }
     }
-
+    /**
+     * Import data from file csv and convert it to MenuItem Object.
+     * @return list of menu item.
+     */
     public void writeAll(List<BillOrder> data){
         if(data == null){
             return;
@@ -91,7 +97,7 @@ public class BillOrderRepository {
         try {
             PrintWriter printWriter = new PrintWriter(file);
             // Bill, Menu, Quantity, Types
-            printWriter.println("Bill, Menu, Quantity, Ordered Time, Types");
+            printWriter.println("Bill Number, Menu, Quantity, Ordered Time, Types");
             data.stream().map(BillOrder::toCSV).forEach(printWriter::println);
             printWriter.flush();
             printWriter.close();

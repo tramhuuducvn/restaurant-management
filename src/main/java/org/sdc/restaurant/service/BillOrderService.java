@@ -2,118 +2,103 @@ package org.sdc.restaurant.service;
 
 import org.sdc.restaurant.entity.BillOrder;
 import org.sdc.restaurant.entity.MenuItem;
-import org.sdc.restaurant.repository.BillOrderRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-// Singleton Design
-public class BillOrderService {
-    private static final BillOrderRepository billOrderRepo;
-    private static final BillOrderService instance;
+public interface BillOrderService {
 
-    static {
-        try {
-            billOrderRepo = BillOrderRepository.getInstance();
-            instance = new BillOrderService();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    /**
+     * Create new bill order
+     *
+     * @param billOrder data of new bill order
+     * @return true if create successful
+     */
+    boolean create(BillOrder billOrder);
 
-    private final List<BillOrder> billOrders;
+    /**
+     * get all bill orders
+     *
+     * @return list of bill order
+     */
+    List<BillOrder> getAll();
 
-    private BillOrderService() {
-        billOrders = billOrderRepo.readBillOrder();
-    }
+    /**
+     * Get bill order by bill number
+     *
+     * @param billNumber bill number or bill id
+     * @return bill order
+     */
+    List<BillOrder> getByNumber(int billNumber);
 
-    public static BillOrderService getInstance() {
-        return instance;
-    }
+    /**
+     * Get menu item by bill number
+     *
+     * @param billNumber bill number or bill id
+     * @return list menu item in bill order
+     */
+    List<MenuItem> getMenuItemByBillNumber(int billNumber);
 
-    public boolean create(BillOrder billOrder) {
-        if (billOrder == null || billOrder.getItem() == null) {
-            return false;
-        }
+    /**
+     * Find index of dish item in bill order by name
+     *
+     * @param billNumber bill number or bill id
+     * @param name
+     * @return index of menu item has the given name
+     */
+    int findIndexItem(int billNumber, String name);
 
-        int existedBillIndex = this.findIndexItem(billOrder.getBillNumber(), billOrder.getItem().getName());
-        if (existedBillIndex >= 0) {
-            return this.updateQuantitiesItem(billOrder.getBillNumber(), billOrder.getItem().getName(), billOrder.getQuantities() + billOrders.get(existedBillIndex).getQuantities());
-        }
+    /**
+     * Find index of item in bill order by dish index.
+     *
+     * @param billNumber bill number or bill id
+     * @param dishIndex
+     * @return index of bill order has a given dish
+     */
+    int findIndexItemByDishIndex(int billNumber, int dishIndex);
 
-        return billOrders.add(billOrder);
-    }
+    /**
+     * Update quantities item.
+     *
+     * @param billNumber bill number
+     * @param dishIndex  dish index
+     * @param quantity   quantity
+     * @return true if update success
+     */
+    boolean updateQuantitiesItem(int billNumber, int dishIndex, int quantity);
 
-    public List<BillOrder> getAll() {
-        return billOrders;
-    }
+    /**
+     * Remove bill by bill number
+     *
+     * @param billNumber similar to bill id
+     * @param dishIndex  index of item in bill, ex: 1, 2, 3
+     * @return true if remove successfully
+     */
+    boolean remove(int billNumber, int dishIndex);
 
-    public List<BillOrder> getByNumber(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).collect(Collectors.toList());
-    }
+    /**
+     * Calculate total price
+     *
+     * @param billNumber similar to bill id
+     * @return total price of bill
+     */
+    public double calculateTotalPrice(int billNumber);
 
-    public List<MenuItem> getMenuItemByBillNumber(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).map(BillOrder::getItem).collect(Collectors.toList());
-    }
+    /**
+     * export data to file csv
+     */
+    void saveToFile();
 
-    private int findIndexItem(int billNumber, String name) {
-        try {
-            MenuItemService menuItemService = MenuItemService.getInstance();
-            MenuItem dish = menuItemService.findByName(name);
-            System.out.println(name + " - " + dish.getName());
-            return IntStream.range(0, billOrders.size()).filter(item -> (billNumber + 1 == billOrders.get(item).getBillNumber() && name.equals(dish.getName()))).findFirst().getAsInt();
-        } catch (NoSuchElementException e) {
-            return -1;
-        }
-    }
 
-    public boolean updateQuantitiesItem(int billNumber, String name, int quantity) {
-        int index = this.findIndexItem(billNumber, name);
-        if (index < 0) {
-            System.out.println("Index: " + index);
-            return false;
-        }
-        System.out.println("Index: " + index);
-        BillOrder billOrder = billOrders.get(index);
-        billOrder.setQuantities(quantity);
-        return billOrders.set(index, billOrder) != null;
-    }
+    /**
+     * print bill order information, that include list of dish, number and total price, etc.
+     *
+     * @param billNumber bill id
+     */
+    void printBillOrder(int billNumber);
 
-    public boolean remove(int billNumber, String name) {
-        int index = this.findIndexItem(billNumber, name);
-        if (index < 0) {
-            return false;
-        }
-
-        return billOrders.remove(index) != null;
-    }
-
-    public double calculateTotalPrice(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillNumber() == billNumber).map(BillOrder::getTotalPrice).reduce(0.0, Double::sum);
-    }
-
-    public void saveToFile() {
-        billOrderRepo.writeAll(billOrders);
-    }
-
-    public void clearAll() {
-        billOrders.clear();
-    }
-
-    public void printBillOrder(int billNumber) {
-        List<BillOrder> list = this.getByNumber(billNumber);
-        if (list.size() < 1) {
-            return;
-        }
-
-        double totalBill = 0;
-        System.out.println("\n------------------ Bill Order #" + billNumber + " ------------------");
-        for (BillOrder item : list) {
-            totalBill += item.getTotalPrice();
-            System.out.println("Dish: " + item.getItem().getName() + ", quantities: " + item.getQuantities() + ", total price: " + item.getTotalPrice());
-        }
-        System.out.println("### Total Price of bill #" + billNumber + " is: " + totalBill);
-    }
+    /**
+     * Get max of bill number
+     * @return max of bill number
+     */
+     int getMaxBillNumber();
 }

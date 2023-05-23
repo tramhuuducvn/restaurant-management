@@ -4,14 +4,15 @@ import org.sdc.restaurant.entity.MenuItem;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.sdc.restaurant.service.impl.MenuItemServiceImpl;
 
 
 public class MenuItemServiceTest {
-    MenuItemService menuItemService;
+    MenuItemServiceImpl menuItemService;
 
     @Before
     public void setUp(){
-        menuItemService = MenuItemService.getInstance();
+        menuItemService = MenuItemServiceImpl.getInstance();
         menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
         menuItemService.create(new MenuItem("Chicken Tom Yum Pizza", "Best marinated chicken with pineapple and mushroom on Spicy Lemon sauce. Enjoy our tasty Thai style pizza.", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu2.jpg", 350, "Italian Thai Chicken Mushroom Hot"));
         menuItemService.create(new MenuItem("Xiaolongbao", "Chinese steamed bun", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu3.jpg", 200, "Chinese Pork Recommended"));
@@ -22,21 +23,21 @@ public class MenuItemServiceTest {
 
     @Test
     public void getInstance() {
-        MenuItemService obj1 = MenuItemService.getInstance();
-        MenuItemService obj2 = MenuItemService.getInstance();
+        MenuItemServiceImpl obj1 = MenuItemServiceImpl.getInstance();
+        MenuItemServiceImpl obj2 = MenuItemServiceImpl.getInstance();
         Assert.assertEquals(obj1, obj2);
     }
 
     @Test
     public void createUnExistedMenuItem_True() {
-        boolean result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
-        Assert.assertTrue(result);
+        MenuItem result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
+        Assert.assertNotNull(result);
     }
 
     @Test
     public void createExistedMenuItem_True() {
-        boolean result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
-        Assert.assertFalse(result);
+        MenuItem result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
+        Assert.assertNull(result);
     }
 
     @Test
