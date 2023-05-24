@@ -69,40 +69,40 @@ public class BillOrderServiceImpl implements BillOrderService {
     }
 
     /**
-     * Get bill order by bill number
+     * Get bill order by bill id
      * 
-     * @param billNumber
-     * @return bill order has bill number equal the given bill number in param
+     * @param billId
+     * @return bill order has bill id equal the given bill number in param
      */
-    public List<BillOrder> getByNumber(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillId() == billNumber).collect(Collectors.toList());
+    public List<BillOrder> getById(int billId) {
+        return billOrders.stream().filter(item -> item.getBillId() == billId).collect(Collectors.toList());
     }
 
     /**
-     * Get menu item by bill number
+     * Get menu item by bill id
      * 
-     * @param billNumber
+     * @param billId
      * @return list of dishes in bill order
      */
-    public List<MenuItem> getMenuItemByBillNumber(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillId() == billNumber).map(BillOrder::getItem)
+    public List<MenuItem> getMenuItemByBillId(int billId) {
+        return billOrders.stream().filter(item -> item.getBillId() == billId).map(BillOrder::getItem)
                 .collect(Collectors.toList());
     }
 
     /**
      * Find index of dish item in bill order by name
      * 
-     * @param billNumber
+     * @param billId
      * @param name
-     * @return index of bill have bill number and name of dish.
+     * @return index of bill have bill id and name of dish.
      */
-    public int findIndexItem(int billNumber, String name) {
+    public int findIndexItem(int billId, String name) {
         try {
             MenuItemServiceImpl menuItemService = MenuItemServiceImpl.getInstance();
             MenuItem dish = menuItemService.findByName(name);
             System.out.println(name + " - " + dish.getName());
             return IntStream.range(0, billOrders.size())
-                    .filter(item -> (billNumber + 1 == billOrders.get(item).getBillId() && name.equals(dish.getName())))
+                    .filter(item -> (billId + 1 == billOrders.get(item).getBillId() && name.equals(dish.getName())))
                     .findFirst().getAsInt();
         } catch (NoSuchElementException e) {
             return -1;
@@ -112,14 +112,14 @@ public class BillOrderServiceImpl implements BillOrderService {
     /**
      * Find index of item in bill order by dish index.
      * 
-     * @param billNumber
+     * @param billId
      * @param dishIndex
-     * @return index of bill have bill number and index of dish in that bill.
+     * @return index of bill have bill id and index of dish in that bill.
      */
-    public int findIndexItemByDishIndex(int billNumber, int dishIndex) {
+    public int findIndexItemByDishIndex(int billId, int dishIndex) {
         int i = 0;
         while (i < billOrders.size()) {
-            if (billOrders.get(i).getBillId() == billNumber) {
+            if (billOrders.get(i).getBillId() == billId) {
                 dishIndex--;
             }
             if (dishIndex == 0) {
@@ -133,13 +133,13 @@ public class BillOrderServiceImpl implements BillOrderService {
     /**
      * Update quantities item.
      * 
-     * @param billNumber
+     * @param billId
      * @param dishIndex
      * @param quantity
      * @return return true if update successful
      */
-    public boolean updateQuantitiesItem(int billNumber, int dishIndex, int quantity) {
-        int index = this.findIndexItemByDishIndex(billNumber, dishIndex);
+    public boolean updateQuantitiesItem(int billId, int dishIndex, int quantity) {
+        int index = this.findIndexItemByDishIndex(billId, dishIndex);
         if (index < 0) {
             System.out.println("Index: " + index);
             return false;
@@ -151,14 +151,14 @@ public class BillOrderServiceImpl implements BillOrderService {
     }
 
     /**
-     * Remove bill by bill number
+     * Remove bill by bill id
      * 
-     * @param billNumber similar to bill id
+     * @param billId similar to bill id
      * @param dishIndex  index of item in bill, ex: 1, 2, 3
      * @return true if remove successfully
      */
-    public boolean remove(int billNumber, int dishIndex) {
-        int index = this.findIndexItemByDishIndex(billNumber, dishIndex);
+    public boolean remove(int billId, int dishIndex) {
+        int index = this.findIndexItemByDishIndex(billId, dishIndex);
         if (index < 0) {
             System.out.println("Index: " + index);
             return false;
@@ -171,11 +171,11 @@ public class BillOrderServiceImpl implements BillOrderService {
     /**
      * Calculate total price
      * 
-     * @param billNumber similar to bill id
+     * @param billId similar to bill id
      * @return total price of bill
      */
-    public double calculateTotalPrice(int billNumber) {
-        return billOrders.stream().filter(item -> item.getBillId() == billNumber).map(BillOrder::getTotalPrice)
+    public double calculateTotalPrice(int billId) {
+        return billOrders.stream().filter(item -> item.getBillId() == billId).map(BillOrder::getTotalPrice)
                 .reduce(0.0, Double::sum);
     }
 
@@ -190,16 +190,16 @@ public class BillOrderServiceImpl implements BillOrderService {
      * print bill order information, that include list of dish, number and total
      * price, etc.
      * 
-     * @param billNumber bill id
+     * @param billId bill id
      */
-    public void printBillOrder(int billNumber) {
-        List<BillOrder> list = this.getByNumber(billNumber);
+    public void printBillOrder(int billId) {
+        List<BillOrder> list = this.getById(billId);
         if (list == null || list.isEmpty()) {
             return;
         }
 
         double totalBill = 0;
-        System.out.println("\n------------------ Bill Order #" + billNumber + " ------------------");
+        System.out.println("\n------------------ Bill Order #" + billId + " ------------------");
         int i = 1;
         for (BillOrder item : list) {
             totalBill += item.getTotalPrice();
@@ -207,13 +207,13 @@ public class BillOrderServiceImpl implements BillOrderService {
                     + ", price: " + item.getItem().getPrice());
             i++;
         }
-        System.out.println("### Total Price of bill #" + billNumber + " is: " + totalBill);
+        System.out.println("### Total Price of bill #" + billId + " is: " + totalBill);
     }
 
     /**
-     * Get max of bill number
+     * Get max of bill id
      * 
-     * @return max of bill number
+     * @return max of bill id
      */
     public int getMaxBillNumber() {
         if (billOrders == null || billOrders.isEmpty()) {

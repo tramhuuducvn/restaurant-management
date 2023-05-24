@@ -28,60 +28,60 @@ public interface BillOrderService {
      * @param billNumber bill number or bill id
      * @return bill order
      */
-    List<BillOrder> getByNumber(int billNumber);
+    List<BillOrder> getById(int billNumber);
 
     /**
-     * Get menu item by bill number
+     * Get menu item by bill id
      *
-     * @param billNumber bill number or bill id
+     * @param billId bill id
      * @return list menu item in bill order
      */
-    List<MenuItem> getMenuItemByBillNumber(int billNumber);
+    List<MenuItem> getMenuItemByBillId(int billId);
 
     /**
      * Find index of dish item in bill order by name
      *
-     * @param billNumber bill number or bill id
+     * @param billId bill id or bill id
      * @param name
      * @return index of menu item has the given name
      */
-    int findIndexItem(int billNumber, String name);
+    int findIndexItem(int billId, String name);
 
     /**
      * Find index of item in bill order by dish index.
      *
-     * @param billNumber bill number or bill id
+     * @param billId bill number or bill id
      * @param dishIndex
      * @return index of bill order has a given dish
      */
-    int findIndexItemByDishIndex(int billNumber, int dishIndex);
+    int findIndexItemByDishIndex(int billId, int dishIndex);
 
     /**
      * Update quantities item.
      *
-     * @param billNumber bill number
+     * @param billId bill id
      * @param dishIndex  dish index
      * @param quantity   quantity
      * @return true if update success
      */
-    boolean updateQuantitiesItem(int billNumber, int dishIndex, int quantity);
+    boolean updateQuantitiesItem(int billId, int dishIndex, int quantity);
 
     /**
-     * Remove bill by bill number
+     * Remove bill by bill id
      *
-     * @param billNumber similar to bill id
+     * @param billId similar to bill id
      * @param dishIndex  index of item in bill, ex: 1, 2, 3
      * @return true if remove successfully
      */
-    boolean remove(int billNumber, int dishIndex);
+    boolean remove(int billId, int dishIndex);
 
     /**
      * Calculate total price
      *
-     * @param billNumber similar to bill id
+     * @param billId
      * @return total price of bill
      */
-    public double calculateTotalPrice(int billNumber);
+    public double calculateTotalPrice(int billId);
 
     /**
      * export data to file csv
@@ -92,13 +92,13 @@ public interface BillOrderService {
     /**
      * print bill order information, that include list of dish, number and total price, etc.
      *
-     * @param billNumber bill id
+     * @param billId bill id
      */
-    void printBillOrder(int billNumber);
+    void printBillOrder(int billId);
 
     /**
-     * Get max of bill number
-     * @return max of bill number
+     * Get max of bill id
+     * @return max of bill id
      */
      int getMaxBillNumber();
 }

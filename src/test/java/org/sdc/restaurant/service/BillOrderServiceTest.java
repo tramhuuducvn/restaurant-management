@@ -36,6 +36,6 @@ public class BillOrderServiceTest {
     public void createBillOrder() {
         BillOrder bill = new BillOrder(1, menuItemService.findByName("Hawaiian Pizza"), 1, new Date());
         billOrderService.create(bill);
-        Assert.assertTrue(billOrderService.getByNumber(1).contains(bill));
+        Assert.assertTrue(billOrderService.getById(1).contains(bill));
     }
 }
