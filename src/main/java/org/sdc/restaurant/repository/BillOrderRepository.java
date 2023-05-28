@@ -1,5 +1,6 @@
 package org.sdc.restaurant.repository;
 
+import org.sdc.restaurant.constant.Constant;
 import org.sdc.restaurant.constant.SpecialCharacters;
 import org.sdc.restaurant.entity.BillOrder;
 import org.sdc.restaurant.entity.MenuItem;
@@ -9,7 +10,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Singleton Design
+/**
+ * Class BillOrderRepository is designed follow singleton design pattern
+ * This class includes the necessary method for read/write data if bill order.
+ */
 public class BillOrderRepository {
     private static final BillOrderRepository instance;
     private static File file;
@@ -45,7 +49,8 @@ public class BillOrderRepository {
      * @return a MenuItem that was created from raw data in values array.
      */
     private BillOrder createBillOrder(String[] values){
-        if(values.length != 5){
+        // Five element data is: Bill, Menu, Quantity, Ordered Time, Types
+        if(values.length != Constant.NUMBER_OF_BILL_ORDER_FIELDS){
             return null;
         }
 
@@ -83,6 +88,7 @@ public class BillOrderRepository {
             return billOrders;
         }
         catch (IOException e){
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -96,13 +102,14 @@ public class BillOrderRepository {
         }
         try {
             PrintWriter printWriter = new PrintWriter(file);
-            // Bill, Menu, Quantity, Types
+            // Bill, Menu, Quantity, Ordered Time, Types
             printWriter.println("Bill Number, Menu, Quantity, Ordered Time, Types");
             data.stream().map(BillOrder::toCSV).forEach(printWriter::println);
             printWriter.flush();
             printWriter.close();
         }
         catch (IOException e){
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

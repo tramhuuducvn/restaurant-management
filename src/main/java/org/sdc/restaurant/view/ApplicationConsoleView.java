@@ -4,6 +4,9 @@ import org.sdc.restaurant.util.Helper;
 
 import java.util.Scanner;
 
+/**
+ * Responsible for Render UI of Restaurant Management
+ */
 public class ApplicationConsoleView {
     /**
      * Render menu management.
@@ -21,7 +24,7 @@ public class ApplicationConsoleView {
                             "4. Listing menu\n" +
                             "5. Search menu by keywords\n" +
                             "6. Save to CSV\n" +
-                            "7. Exit\n");
+                            "7. Back\n");
 
             int choose = Helper.getInputInteger("Enter your options: ", "Invalid value, try again!");
 
@@ -73,7 +76,7 @@ public class ApplicationConsoleView {
                             "4. Remove dish to bill\n" +
                             "5. Update quantities of dish\n" +
                             "6. Save to CSV\n" +
-                            "7. Exit\n");
+                            "7. Back\n");
 
             int choose = Helper.getInputInteger("Enter your options: ", "Invalid value, try again!");
 

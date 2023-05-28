@@ -7,6 +7,9 @@ import org.sdc.restaurant.constant.SpecialCharacters;
 
 import java.util.Date;
 
+/**
+ * This class includes all attribute represents for BillOrder
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,6 +51,6 @@ public class BillOrder {
     @Override
     public boolean equals(Object obj) {
         BillOrder target = (BillOrder) obj;
-        return this.billId == target.billId && this.item.equals(target.item);// && this.quantities == target.quantities;
+        return this.billId == target.billId && this.item.equals(target.item);
     }
 }

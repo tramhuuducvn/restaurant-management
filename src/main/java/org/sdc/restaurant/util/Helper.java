@@ -5,6 +5,9 @@ import org.sdc.restaurant.constant.SpecialCharacters;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Helper have common functions usually use in this project
+ */
 public class Helper {
     /**
      * Search each word in the given keywords param

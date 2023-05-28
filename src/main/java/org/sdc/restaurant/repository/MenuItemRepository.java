@@ -1,12 +1,16 @@
 package org.sdc.restaurant.repository;
 
+import org.sdc.restaurant.constant.Constant;
 import org.sdc.restaurant.constant.SpecialCharacters;
 import org.sdc.restaurant.entity.MenuItem;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class MenuItemRepository is designed follow singleton design pattern
+ * This class includes the necessary method for read/write data if menu item .
+ */
 public class MenuItemRepository {
     private static final MenuItemRepository instance;
     private static File file;
@@ -44,7 +48,7 @@ public class MenuItemRepository {
      */
     private MenuItem createMenuItem(int id, String[] values){
         //Name, Description, Image, Price, Types, Deleted
-        if(values.length != 6) {
+        if(values.length != Constant.NUMBER_OF_MENU_ITEM_FIELDS) {
             return null;
         }
         return new MenuItem(id, values[0], values[1], values[2], Double.parseDouble(values[3]) , values[4], Boolean.parseBoolean(values[5]));

@@ -23,12 +23,12 @@ public interface BillOrderService {
     List<BillOrder> getAll();
 
     /**
-     * Get bill order by bill number
+     * Get bill order by bill id
      *
-     * @param billNumber bill number or bill id
+     * @param billId  bill id
      * @return bill order
      */
-    List<BillOrder> getById(int billNumber);
+    List<BillOrder> getById(int billId);
 
     /**
      * Get menu item by bill id
@@ -37,29 +37,27 @@ public interface BillOrderService {
      * @return list menu item in bill order
      */
     List<MenuItem> getMenuItemByBillId(int billId);
-
     /**
-     * Find index of dish item in bill order by name
      *
-     * @param billId bill id or bill id
-     * @param name
-     * @return index of menu item has the given name
+     * @param billId id of bill order
+     * @param dishId id of menu item
+     * @return index of bill order in list bill
      */
-    int findIndexItem(int billId, String name);
+    public int findIndexItemByDishId(int billId, int dishId);
 
-    /**
-     * Find index of item in bill order by dish index.
-     *
-     * @param billId bill number or bill id
-     * @param dishIndex
-     * @return index of bill order has a given dish
-     */
+        /**
+         * Find index of item in bill order by dish index.
+         *
+         * @param billId id of bill order
+         * @param dishIndex index of dish in bill order
+         * @return index of bill order has a given dish
+         */
     int findIndexItemByDishIndex(int billId, int dishIndex);
 
     /**
      * Update quantities item.
      *
-     * @param billId bill id
+     * @param billId id of bill order
      * @param dishIndex  dish index
      * @param quantity   quantity
      * @return true if update success
@@ -78,7 +76,7 @@ public interface BillOrderService {
     /**
      * Calculate total price
      *
-     * @param billId
+     * @param billId id of bill order
      * @return total price of bill
      */
     public double calculateTotalPrice(int billId);
@@ -92,7 +90,7 @@ public interface BillOrderService {
     /**
      * print bill order information, that include list of dish, number and total price, etc.
      *
-     * @param billId bill id
+     * @param billId id of bill order
      */
     void printBillOrder(int billId);
 

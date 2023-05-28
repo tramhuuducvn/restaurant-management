@@ -10,6 +10,9 @@ import org.sdc.restaurant.util.Helper;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Responsible for Render UI of Bill Order
+ */
 @NoArgsConstructor
 public class BillOrderView {
     private static final BillOrderController billOrderController = new BillOrderController();
@@ -40,20 +43,11 @@ public class BillOrderView {
     }
 
     /**
-     * Create new bill order
+     * Choose Yes No
+     * @return true if yes, false if no
      */
-    public void create() {
-        // Get bill number
-        int billNumber = billOrderController.getMaxBillNumber() + 1;
-        System.out.println("Add new bill #"+ billNumber + ": ");
-
-        while (true) {
-            // Pick menu item to new bill
-            MenuItem menuItem = this.pickeMenuItem();
-            // enter quantities
-            int quantities = Helper.getInputInteger("Enter quantities of dish",
-                    "The entered value must be an integer, please try again:");
-            billOrderController.create(new BillOrder(billNumber, menuItem, quantities, new Date()));
+    public boolean enterYesNo(){
+        while(true){
             System.out.println(
                     "Do you want to add more dish?\n" +
                             "Choose option:\n" +
@@ -63,9 +57,33 @@ public class BillOrderView {
                     "Entered value must be an integer, please try again!");
 
             if (choose == 1) {
-                continue;
+                return true;
             }
             if (choose == 2) {
+                return false;
+            }
+            System.out.println("Your input must be 1 or 2");
+        }
+    }
+
+    /**
+     * Create new bill order
+     */
+    public void create() {
+        // Get bill id
+        int billNumber = billOrderController.getMaxBillNumber() + 1;
+        System.out.println("Add new bill #"+ billNumber + ": ");
+
+        while (true) {
+            // Pick menu item to new bill
+            MenuItem menuItem = this.pickeMenuItem();
+            // enter quantities
+            int quantities = Helper.getInputInteger("Enter quantities of dish:",
+                    "The entered value must be an integer, please try again:");
+            billOrderController.create(new BillOrder(billNumber, menuItem, quantities, new Date()));
+
+            boolean choose = this.enterYesNo();
+            if (!choose){
                 return;
             }
         }
@@ -76,6 +94,10 @@ public class BillOrderView {
      */
     public void listingBill() {
         int max = billOrderController.getMaxBillNumber();
+        if(max == 0){
+            System.out.println("No any bills");
+            return;
+        }
         for (int i = 0; i < max; ++i) {
             this.printBillOrder(i + 1);
         }
@@ -116,7 +138,7 @@ public class BillOrderView {
             break;
         }
         // Enter quantities
-        int quantities = Helper.getInputInteger("Enter quantities of dish",
+        int quantities = Helper.getInputInteger("Enter quantities of dish:",
                 "The entered value must be an integer, please try again:");
 
         billOrderController.create(new BillOrder(billNumber, menuItem, quantities, new Date()));

@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.sdc.restaurant.constant.SpecialCharacters;
 import org.sdc.restaurant.util.Helper;
 
+/**
+ * This class includes all attribute represents for BillOrder
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -18,7 +21,7 @@ public class MenuItem {
     private String image;
     private double price;
     private String types;
-    private boolean deleted;
+    private boolean isDeleted;
 
     public MenuItem(String name, String description, String image, double price, String types) {
         this.name = Helper.reformatText(name);
@@ -26,7 +29,7 @@ public class MenuItem {
         this.image = Helper.reformatText(image);
         this.price = price;
         this.types = Helper.reformatText(types);
-        this.deleted = false;
+        this.isDeleted = false;
     }
 
     /**
@@ -41,7 +44,7 @@ public class MenuItem {
         // Name, Description, Image, Price, Types, Deleted
         return this.name + SpecialCharacters.COMMA_SPACE + this.description + SpecialCharacters.COMMA_SPACE + this.image
                 + SpecialCharacters.COMMA_SPACE + this.price + SpecialCharacters.COMMA_SPACE + this.types
-                + SpecialCharacters.COMMA_SPACE + this.deleted;
+                + SpecialCharacters.COMMA_SPACE + this.isDeleted;
     }
 
     @Override

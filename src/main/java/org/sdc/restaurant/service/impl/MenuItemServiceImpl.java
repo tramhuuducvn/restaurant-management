@@ -11,7 +11,10 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-// Singleton Design Pattern
+/**
+ * Class MenuItemServiceImpl is designed follow singleton design pattern
+ * This class includes the necessary method for handling business logic for each request related to MenuItem.
+ */
 public class MenuItemServiceImpl implements MenuItemService {
     private static final MenuItemServiceImpl instance;
     private static final MenuItemRepository repo;
@@ -48,6 +51,7 @@ public class MenuItemServiceImpl implements MenuItemService {
             return IntStream.range(0, menuItems.size()).filter(item -> id == menuItems.get(item).getItemId())
                     .findFirst().getAsInt();
         } catch (NoSuchElementException e) {
+            e.printStackTrace();
             return -1;
         }
     }
@@ -63,6 +67,7 @@ public class MenuItemServiceImpl implements MenuItemService {
             return IntStream.range(0, menuItems.size()).filter(item -> name.equals(menuItems.get(item).getName()))
                     .findFirst().getAsInt();
         } catch (NoSuchElementException e) {
+            e.printStackTrace();
             return -1;
         }
     }

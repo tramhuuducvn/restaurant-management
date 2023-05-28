@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * DateTimeHelper have all method needed for format and convert datetime
+ */
 public class DateTimeHelper {
     /**
      * Convert text to date object by special format (EEE MMM dd HH:mm:ss zzz yyyy).

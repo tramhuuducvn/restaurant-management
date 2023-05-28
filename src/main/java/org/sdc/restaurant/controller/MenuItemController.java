@@ -8,6 +8,11 @@ import org.sdc.restaurant.service.impl.MenuItemServiceImpl;
 
 import java.util.List;
 
+/**
+ * This class represent for Presentation Layer which is responsible for receiving requests from users
+ * and interact with the Service Layer to handle or cook data to respond back to the user.
+ * Every method focus on manage menu item.
+ */
 @AllArgsConstructor
 public class MenuItemController {
     private static final MenuItemService menuItemService;
@@ -35,7 +40,7 @@ public class MenuItemController {
     }
 
     /**
-     * 
+     * Update Menu item by id
      * @param id       id of item
      * @param menuItem data menu item
      */
@@ -77,7 +82,7 @@ public class MenuItemController {
     }
 
     /**
-     * 
+     * Search item in menu by special types with the given keywords
      * @param keywords       keywords want to search
      * @param searchMenuType search by type, by all, by name, by description,...
      * @return result of menu item matched with the given keyword
