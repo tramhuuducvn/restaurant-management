@@ -30,8 +30,8 @@ public class BillOrderController {
     /**
      * Create new bill order
      */
-    public void create(BillOrder billOrder) {
-        billOrderService.create(billOrder);
+    public boolean create(BillOrder billOrder) {
+       return billOrderService.create(billOrder);
     }
 
     /**

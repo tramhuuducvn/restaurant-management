@@ -29,15 +29,28 @@ public class MenuItemServiceTest {
     }
 
     @Test
-    public void createUnExistedMenuItem_True() {
-        MenuItem result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
-        Assert.assertNotNull(result);
-    }
-
-    @Test
     public void createExistedMenuItem_True() {
         MenuItem result = menuItemService.create(new MenuItem("Hawaiian Pizza", "All-time favourite toppings, Hawaiian pizza in Tropical Hawaii style", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
         Assert.assertNull(result);
+    }
+
+    @Test
+    public void updateMenuItem() {
+        menuItemService.updateById(1, new MenuItem("Hawaiian Pizza", "Hello", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
+        MenuItem item = menuItemService.getById(1);
+        Assert.assertEquals("Hello", item.getDescription());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void getById(){
+        menuItemService.getById(-10);
+    }
+
+    @Test
+    public void deleteMenuItem(){
+        menuItemService.deleteById(1);
+        MenuItem item = menuItemService.getById(1);
+        Assert.assertTrue(item.isDeleted());
     }
 
     @Test

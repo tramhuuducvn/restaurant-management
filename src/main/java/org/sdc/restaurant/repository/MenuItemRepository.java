@@ -4,7 +4,12 @@ import org.sdc.restaurant.constant.Constant;
 import org.sdc.restaurant.constant.SpecialCharacters;
 import org.sdc.restaurant.entity.MenuItem;
 
-import java.io.*;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.FileReader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -26,7 +31,7 @@ public class MenuItemRepository {
 
     private MenuItemRepository(){
         try {
-            file = new File("menu.csv");
+            file = new File(Constant.MENU_FILE);
             if(!file.exists()) {
                 file.createNewFile();
             }
@@ -42,16 +47,17 @@ public class MenuItemRepository {
 
     /**
      * Create menu item from raw data
-     * @param id id of menu item
+     *
+     * @param id     id of menu item
      * @param values raw data
-     * @return
+     * @return Menu Item created from raw data
      */
-    private MenuItem createMenuItem(int id, String[] values){
+    public MenuItem createMenuItem(int id, String[] values) {
         //Name, Description, Image, Price, Types, Deleted
-        if(values.length != Constant.NUMBER_OF_MENU_ITEM_FIELDS) {
+        if (values.length != Constant.NUMBER_OF_MENU_ITEM_FIELDS) {
             return null;
         }
-        return new MenuItem(id, values[0], values[1], values[2], Double.parseDouble(values[3]) , values[4], Boolean.parseBoolean(values[5]));
+        return new MenuItem(id, values[Constant.MENU_NAME_INDEX], values[Constant.MENU_DESCRIPTION_INDEX], values[Constant.MENU_IMAGE_INDEX], Double.parseDouble(values[Constant.MENU_PRICE_INDEX]), values[Constant.MENU_TYPES_INDEX], Boolean.parseBoolean(values[Constant.MENU_DELETED_INDEX]));
     }
 
     /**
@@ -68,7 +74,7 @@ public class MenuItemRepository {
             while((line = bufferedReader.readLine()) != null){
                 //Name, Description, Image, Price, Types
                 String[] values = line.split(SpecialCharacters.COMMA_SPACE);
-                if(values[0].equals("Name")){
+                if(values[Constant.MENU_NAME_INDEX].equals(Constant.IGNORE_MENU_ITEM_VALUE)){
                     continue;
                 }
                 menuItems.add(this.createMenuItem(count, values));
@@ -92,7 +98,7 @@ public class MenuItemRepository {
         }
         try {
             PrintWriter printWriter = new PrintWriter(file);
-            printWriter.println("Name, Description, Image, Price, Types, Deleted");
+            printWriter.println(Constant.COLUMN_VALUE_OF_MENU_ITEM);
             data.stream().map(MenuItem::toCSV).forEach(printWriter::println);
             printWriter.flush();
             printWriter.close();

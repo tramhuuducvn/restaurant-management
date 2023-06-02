@@ -23,6 +23,14 @@ public class MenuItem {
     private String types;
     private boolean isDeleted;
 
+    /**
+     * Custom constructor of MenuItem
+     * @param name name of item
+     * @param description description of dish
+     * @param image url of item
+     * @param price price of item
+     * @param types type of item
+     */
     public MenuItem(String name, String description, String image, double price, String types) {
         this.name = Helper.reformatText(name);
         this.description = Helper.reformatText(description);
@@ -33,8 +41,8 @@ public class MenuItem {
     }
 
     /**
-     * 
-     * @return combination content of name, description,...
+     * Get overall content of menu item
+     * @return combination content of name, description, types.
      */
     public String getContent() {
         return this.name + SpecialCharacters.SPACE + this.description + SpecialCharacters.SPACE + this.getTypes();

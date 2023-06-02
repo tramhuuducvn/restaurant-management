@@ -80,7 +80,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     public MenuItem create(MenuItem menuItem) {
         for (MenuItem item : menuItems) {
-            if (item.getName().equals(menuItem.getName()) && !item.isDeleted()) {
+            if (Helper.checkNearlySimilarName(item.getName(), menuItem.getName()) && !item.isDeleted()) {
                 System.out.println("Can't create new dish because the name has existed!");
                 return null;
             }
@@ -117,13 +117,13 @@ public class MenuItemServiceImpl implements MenuItemService {
      * @param id   id of dish in menu need to update.
      * @param item new data of dish will be updated.
      */
-    public void updateById(int id, MenuItem item) {
+    public boolean updateById(int id, MenuItem item) {
         int index = this.findIndexById(id);
         if (index < 0) {
-            return;
+            return false;
         }
         item.setItemId(id);
-        menuItems.set(index, item);
+       return menuItems.set(index, item) != null;
     }
 
     /**
@@ -191,7 +191,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      * Search menu item with given keyword by all, by name, by description, by type.
      * 
      * @param keywords       the keywords that users want to search
-     * @param searchMenuType user can search by Name, by Description,...
+     * @param searchMenuType user can search by All, by Name, by Description, by Types`
      * @return result of all item in menu that matched to the given keyword.
      */
     public List<MenuItem> search(String keywords, SearchMenuType searchMenuType) {
@@ -230,6 +230,10 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public void clearAll() {
+        menuItems.clear();
+    }
 
+    public MenuItem getById(int id) {
+        return menuItems.get(id);
     }
 }

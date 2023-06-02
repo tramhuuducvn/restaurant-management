@@ -15,8 +15,9 @@ import java.util.List;
  */
 @AllArgsConstructor
 public class MenuItemController {
-    private static final MenuItemService menuItemService;
-    static {
+    private MenuItemService menuItemService;
+
+    public MenuItemController(){
         menuItemService = MenuItemServiceImpl.getInstance();
     }
 
@@ -25,8 +26,8 @@ public class MenuItemController {
      * 
      * @param menuItem data of new item
      */
-    public void create(MenuItem menuItem) {
-        menuItemService.create(menuItem);
+    public boolean create(MenuItem menuItem) {
+        return menuItemService.create(menuItem) != null;
     }
 
     /**
@@ -44,8 +45,8 @@ public class MenuItemController {
      * @param id       id of item
      * @param menuItem data menu item
      */
-    public void updateById(int id, MenuItem menuItem) {
-        menuItemService.updateById(id, menuItem);
+    public boolean updateById(int id, MenuItem menuItem) {
+        return menuItemService.updateById(id, menuItem);
     }
 
     /**

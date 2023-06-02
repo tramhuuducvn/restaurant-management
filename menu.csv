@@ -1,4 +1,13 @@
-Name, Description, Image, Price, Types
-Pitbull, Pitbull so cute, https, 40.0, usa
-La Mo, an voi thit cho pitbull, la mo , 5.0, rau
-Beer, 0.7 % con, https://beercuda, 30.0, vietnam
+Name, Description, Image, Price, Types, Deleted
+Kim Chi Gio, Traditional side dish made from salted and fermented vegetables, https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu4.jpg, 50.0, Korea, false
+Tra Oolong, Partially fermented tea grown in the Alishan area, https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu5.jpg, 50.0, Hot Non-alcohol, false
+Beer, Fantastic flavors and authentic regional appeal beer, https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu6.jpg, 60.0, Alcohol, false
+Hawaiian Pizza, All-time favourite toppings Hawaiian pizza in Tropical Hawaii style, https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg, 300.0, Italian Ham Pineapple, false
+Chicken Tom Yum Pizza, Best marinated chicken with pineapple and mushroom on Spicy Lemon sauce. Enjoy our tasty Thai style pizza., https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu2.jpg, 350.0, Italian Thai Chicken Mushroom Hot, false
+Xiaolongbao, Chinese steamed bun, https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu3.jpg, 200.0, Chinese Pork Recommended, false
+Takoyaki, Japan, https://takoyaki, 100.0, Japan Food, false
+Banh Xeo, Banh xeo Phu Yen rat ngon, https://banhxeo, 5.0, viet nam gao, true
+Chinese Ramen, abc, abc, 9.8, china, false
+Banh Cuon Cha Gio, abc, https://image, 12.9, Viet Nam, false
+Pitbull, Cho pitbull so cute, https:chopitu, 3000.0, cho meo, true
+Banh Bao, abc, https://à, 16.5, Viet Nam, true

@@ -52,7 +52,7 @@ public interface MenuItemService {
      * @param id   id of dish in menu need to update.
      * @param item new data of dish will be updated.
      */
-    void updateById(int id, MenuItem item);
+    boolean updateById(int id, MenuItem item);
 
     /**
      * Update by name.
@@ -91,7 +91,7 @@ public interface MenuItemService {
      * Search menu item with given keyword by all, by name or by description, by type.
      *
      * @param keywords       the keywords that users want to search
-     * @param searchMenuType user can search by Name, by Description,...
+     * @param searchMenuType user can search by All, by Name, by Description, by Types.
      * @return result of all item in menu that matched to the given keyword.
      */
     List<MenuItem> search(String keywords, SearchMenuType searchMenuType);

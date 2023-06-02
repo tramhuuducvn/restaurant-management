@@ -1,8 +1,8 @@
 package org.sdc.restaurant.service;
 
 import org.sdc.restaurant.entity.BillOrder;
-import org.sdc.restaurant.entity.MenuItem;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BillOrderService {
@@ -31,19 +31,11 @@ public interface BillOrderService {
     List<BillOrder> getById(int billId);
 
     /**
-     * Get menu item by bill id
-     *
-     * @param billId bill id
-     * @return list menu item in bill order
-     */
-    List<MenuItem> getMenuItemByBillId(int billId);
-    /**
-     *
      * @param billId id of bill order
-     * @param dishId id of menu item
+     * @param dishId index of menu item in bill order
      * @return index of bill order in list bill
      */
-    public int findIndexItemByDishId(int billId, int dishId);
+    int findBillIndexByItemId(int billId, int dishId);
 
         /**
          * Find index of item in bill order by dish index.
@@ -52,7 +44,7 @@ public interface BillOrderService {
          * @param dishIndex index of dish in bill order
          * @return index of bill order has a given dish
          */
-    int findIndexItemByDishIndex(int billId, int dishIndex);
+    int findBillIndexByDishIndex(int billId, int dishIndex);
 
     /**
      * Update quantities item.
@@ -79,7 +71,7 @@ public interface BillOrderService {
      * @param billId id of bill order
      * @return total price of bill
      */
-    public double calculateTotalPrice(int billId);
+    double calculateTotalPrice(int billId);
 
     /**
      * export data to file csv
@@ -98,5 +90,20 @@ public interface BillOrderService {
      * Get max of bill id
      * @return max of bill id
      */
-     int getMaxBillNumber();
+    int getMaxBillNumber();
+
+    /**
+     * Find index item by dish index
+     *
+     * @param billId    id of bill order
+     * @param dishIndex index of dish in that bill
+     * @return BillOrder
+     */
+    BillOrder getBillByDishIndex(int billId, int dishIndex);
+
+    /**
+     * Get ordered time of bill order
+     * @param billId id of bill order
+     */
+    Date getOrderedDate(int billId);
 }

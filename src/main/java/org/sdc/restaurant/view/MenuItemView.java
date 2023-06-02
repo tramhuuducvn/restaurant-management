@@ -20,11 +20,11 @@ public class MenuItemView {
      * create menu item
      */
     public void create() {
-        String name = Helper.getInputString("Enter name:", "Invalid value, please try again:");
-        String description = Helper.getInputString("Enter description:", "Invalid value, please try again:");
-        String image = Helper.getInputString("Enter image url: ", "Invalid value, please try again:");
-        double price = Helper.getInputDouble("Enter price: ", "Invalid value, please try again:");
-        String type = Helper.getInputString("Enter type: ", "Invalid value, please try again:");
+        String name = Helper.getInputString("Enter name:", "ame must be a string, please try again:");
+        String description = Helper.getInputString("Enter description:", "The description must be a string, please try again:");
+        String image = Helper.getInputURLValue("Enter image url: ", "Invalid URL value, please try again:");
+        double price = Helper.getInputPositiveDouble("Enter price: ", "Price must be a number, please try again:");
+        String type = Helper.getInputString("Enter type: ", "Type must be a string, please try again:");
 
         menuItemController.create(new MenuItem(name, description, image, price, type));
     }
@@ -46,11 +46,12 @@ public class MenuItemView {
             break;
         }
 
-        String name = Helper.getInputString("Enter name:", "Invalid value, please try again:");
-        String description = Helper.getInputString("Enter description:", "Invalid value, please try again:");
-        String image = Helper.getInputString("Enter image url: ", "Invalid value, please try again:");
-        double price = Helper.getInputDouble("Enter price: ", "Invalid value, please try again:");
-        String type = Helper.getInputString("Enter type: ", "Invalid value, please try again:");
+        String name = Helper.getInputString("Enter name:", "ame must be a string, please try again:");
+        String description = Helper.getInputString("Enter description:", "The description must be a string, please try again:");
+        String image = Helper.getInputURLValue("Enter image url: ", "Invalid URL value, please try again:");
+        double price = Helper.getInputPositiveDouble("Enter price: ", "Price must be a positive number, please try again:");
+        String type = Helper.getInputString("Enter type: ", "Type must be a string, please try again:");
+
         menuItemController.updateById(id, new MenuItem(name, description, image, price, type));
     }
 
@@ -110,7 +111,6 @@ public class MenuItemView {
             }
             return type;
         }
-
     }
 
     /**

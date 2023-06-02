@@ -22,7 +22,7 @@ public class BillOrderView {
      *
      * @return Menu Item
      */
-    public MenuItem pickeMenuItem() {
+    public MenuItem pickMenuItem() {
         MenuItemController menuItemController = new MenuItemController(); // Listing menu item
         System.out.println("Pick one of the given list menu item below: ");
         menuItemController.listingMenu();
@@ -76,7 +76,7 @@ public class BillOrderView {
 
         while (true) {
             // Pick menu item to new bill
-            MenuItem menuItem = this.pickeMenuItem();
+            MenuItem menuItem = this.pickMenuItem();
             // enter quantities
             int quantities = Helper.getInputInteger("Enter quantities of dish:",
                     "The entered value must be an integer, please try again:");
