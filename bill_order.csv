@@ -1,5 +1,5 @@
 Bill ID, Menu, Quantity, Ordered Time, Types
-1, Tra Oolong, 12, Fri May 26 16:48:22 ICT 2023, Hot Non-alcohol
+1, Tra Oolong, 15, Sat Jun 03 15:45:33 ICT 2023, Hot Non-alcohol
 1, Beer, 12, Fri May 26 16:48:25 ICT 2023, Alcohol
 1, Chicken Tom Yum Pizza, 2, Fri May 26 16:48:29 ICT 2023, Italian Thai Chicken Mushroom Hot
 2, Tra Oolong, 4, Fri May 26 16:48:38 ICT 2023, Hot Non-alcohol
@@ -10,3 +10,6 @@ Bill ID, Menu, Quantity, Ordered Time, Types
 2, Chinese Ramen, 5, Mon May 29 10:13:11 ICT 2023, china
 1, Banh Cuon Cha Gio, 12, Tue May 30 14:50:50 ICT 2023, Viet Nam
 3, Banh Cuon Cha Gio, 10, Tue May 30 15:06:35 ICT 2023, Viet Nam
+4, Kim Chi Gio, 2, Sat Jun 03 15:43:14 ICT 2023, Korea
+4, Tra Oolong, 10, Sat Jun 03 15:43:41 ICT 2023, Hot Non-alcohol
+4, Banh Cuon Cha Gio, 12, Sat Jun 03 15:44:04 ICT 2023, Viet Nam

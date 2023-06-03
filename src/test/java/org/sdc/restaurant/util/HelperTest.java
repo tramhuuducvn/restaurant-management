@@ -31,7 +31,7 @@ public class HelperTest {
     }
 
     @Test
-    public void checkNearlySimilarName(){
+    public void checkNearlySimilarName_True(){
         boolean result = Helper.checkNearlySimilarName("Banh Xeo", "banh xeo");
         Assert.assertTrue(result);
     }

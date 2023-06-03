@@ -87,7 +87,7 @@ public class BillOrderServiceImpl implements BillOrderService {
      */
     public int findBillIndexByDishIndex(int billId, int dishIndex) {
         int i = 0;
-        while (i < billOrders.size()) {
+        while (i < billOrders.size() && dishIndex > 0) {
             if (billOrders.get(i).getBillId() == billId) {
                 dishIndex--;
             }

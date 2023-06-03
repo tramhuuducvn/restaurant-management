@@ -16,6 +16,7 @@ public class BillOrderTest {
         date = new Date();
         billOrder = new BillOrder(1, item, 3, date);
     }
+
     @Test
     public void getTotalPrice_ItemPriceIs300AndQuantitiesIs3_15() {
         Assert.assertEquals(900.0, billOrder.getTotalPrice(), 0.001);

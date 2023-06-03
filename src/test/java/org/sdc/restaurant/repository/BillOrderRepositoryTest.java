@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sdc.restaurant.constant.SpecialCharacters;
 import org.sdc.restaurant.entity.BillOrder;
+import org.sdc.restaurant.entity.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,11 @@ public class BillOrderRepositoryTest {
         Assert.assertEquals(src, billOrder.toCSV());
     }
 
-//    @Test
-//    public void readAndWriteData() {
-//        List<BillOrder> list = new ArrayList<>();
-//        list.add(repository.createBillOrder("2, Banh Xeo, 100, Fri May 26 16:49:20 ICT 2023, viet nam gao".split(SpecialCharacters.COMMA_SPACE)));
-//        repository.writeAll(list);
-//        List <BillOrder> actual = repository.readBillOrder();
-//        Assert.assertEquals(list, actual);
-//    }
+    @Test
+    public void readAndWriteData() {
+        List<BillOrder> before = repository.readBillOrder();
+        repository.writeAll(before);
+        List<BillOrder> after = repository.readBillOrder();
+        Assert.assertEquals(after, before);
+    }
 }

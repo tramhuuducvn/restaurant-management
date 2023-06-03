@@ -168,6 +168,7 @@ public class BillOrderView {
 
         int dishIndex = Helper.getInputInteger("Enter the dish index you want to update: ",
                 "Invalid value, please try again");
+
         int newQuantities = Helper.getInputInteger("Please enter quantities you want to update: ",
                 "Invalid value, please try again: ");
 
@@ -186,18 +187,18 @@ public class BillOrderView {
         int billNumber;
 
         while (true) {
-            billNumber = Helper.getInputInteger("Please enter bill number you want to add new dish: ",
+            billNumber = Helper.getInputInteger("Please enter bill number you want to remove menu item from that: ",
                     "Invalid value, please try again: ");
             if (billNumber <= maxBillNumber && billNumber > 0) {
                 break;
             }
             System.out.println("Can't found bill number, please try again: ");
         }
-        int dishIndex = Helper.getInputInteger("Enter the dish index you want to update: ",
+        int dishIndex = Helper.getInputInteger("Enter the dish index you want to delete: ",
                 "Invalid value, please try again");
         if (!billOrderController.removeDish(billNumber, dishIndex)) {
             System.out.println(
-                    "Update failed, may be your enter data doesn't correct or not match with the data, please try again!");
+                    "Delete failed, may be your enter data doesn't correct or not match with the data, please try again!");
         }
     }
 

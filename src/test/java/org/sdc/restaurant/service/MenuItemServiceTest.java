@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sdc.restaurant.service.impl.MenuItemServiceImpl;
 
+import java.util.NoSuchElementException;
+
 
 public class MenuItemServiceTest {
     MenuItemServiceImpl menuItemService;
@@ -22,7 +24,7 @@ public class MenuItemServiceTest {
     }
 
     @Test
-    public void getInstance() {
+    public void compareTwoInstanceOfSingletonClass() {
         MenuItemServiceImpl obj1 = MenuItemServiceImpl.getInstance();
         MenuItemServiceImpl obj2 = MenuItemServiceImpl.getInstance();
         Assert.assertEquals(obj1, obj2);
@@ -35,7 +37,7 @@ public class MenuItemServiceTest {
     }
 
     @Test
-    public void updateMenuItem() {
+    public void updateDescriptionMenuItemWithId1() {
         menuItemService.updateById(1, new MenuItem("Hawaiian Pizza", "Hello", "https://s3-ap-southeast-1.amazonaws.com/interview.ampostech.com/backend/restaurant/menu1.jpg", 300, "Italian Ham Pineapple"));
         MenuItem item = menuItemService.getById(1);
         Assert.assertEquals("Hello", item.getDescription());
@@ -47,7 +49,7 @@ public class MenuItemServiceTest {
     }
 
     @Test
-    public void deleteMenuItem(){
+    public void deleteMenuItemWithId1_True(){
         menuItemService.deleteById(1);
         MenuItem item = menuItemService.getById(1);
         Assert.assertTrue(item.isDeleted());
