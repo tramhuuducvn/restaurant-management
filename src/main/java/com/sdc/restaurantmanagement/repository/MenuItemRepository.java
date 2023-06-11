@@ -1,5 +1,8 @@
 package com.sdc.restaurantmanagement.repository;
 
-public interface MenuItemRepository {
+import com.sdc.restaurantmanagement.entity.MenuItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
 }
