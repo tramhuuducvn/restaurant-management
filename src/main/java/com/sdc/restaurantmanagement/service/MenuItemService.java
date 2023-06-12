@@ -1,6 +1,7 @@
 package com.sdc.restaurantmanagement.service;
 
 import com.sdc.restaurantmanagement.payload.dto.MenuItemDTO;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,11 @@ public interface MenuItemService {
      * @return MenuItemDTO
      */
     MenuItemDTO getMenuItemById(Long id);
+
+    /**
+     * Create new menu item
+     * @param request data request
+     * @return true if create successful, otherwise return false
+     */
+    public boolean createMenuItem(MenuItemCreationRequest request);
 }

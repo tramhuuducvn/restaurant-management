@@ -2,6 +2,7 @@ package com.sdc.restaurantmanagement.controller;
 
 import com.sdc.restaurantmanagement.payload.APIResponse;
 import com.sdc.restaurantmanagement.payload.dto.MenuItemDTO;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.service.MenuItemService;
 import lombok.AllArgsConstructor;
@@ -47,5 +48,17 @@ public class MenuItemController {
     public APIResponse getMenuItemById(@PathVariable Long id){
         MenuItemDTO menuItemDTO = menuItemService.getMenuItemById(id);
         return APIResponse.builder(HttpStatus.OK).message("Menu item has been found").data(menuItemDTO).build();
+    }
+
+    /**
+     * Create new menu item
+     * @param request data need to create a menu item, under json data type.
+     * @return APIResponse represent created successful
+     */
+    @PostMapping(value = "")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public APIResponse createMenuItem(@RequestBody MenuItemCreationRequest request){
+        menuItemService.createMenuItem(request);
+        return APIResponse.builder(HttpStatus.CREATED).message("Create menu item successful").build();
     }
 }
