@@ -1,4 +1,4 @@
-package com.sdc.restaurantmanagement.payload.response;
+package com.sdc.restaurantmanagement.payload;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BodyResponse {
+public class APIResponse {
     private final int status; // required
     private final String statusText; // required
     private final String message;
@@ -34,7 +34,7 @@ public class BodyResponse {
          * @param message message
          * @return an instance of BodyResponseBuilder
          */
-        public BodyResponseBuilder buildMessage(String message){
+        public BodyResponseBuilder message(String message){
             this.message = message;
             return this;
         }
@@ -44,14 +44,26 @@ public class BodyResponse {
          * @param data object data need to return
          * @return an instance of BodyResponseBuilder
          */
-        public BodyResponseBuilder buildData(Object data){
+        public BodyResponseBuilder data(Object data){
             this.data = data;
             return this;
         }
 
-        public BodyResponse build(){
-            BodyResponse bodyResponse = new BodyResponse(this.status, this.statusText, this.message, this.data);
-            return bodyResponse;
+        /**
+         * Build BodyResponse
+         * @return BodyResponse
+         */
+        public APIResponse build(){
+            return new APIResponse(this.status, this.statusText, this.message, this.data);
         }
+    }
+
+    /**
+     * Get Builder of BodyResponse class, using for build BodyResponse
+     * @param data required field of BodyResponse
+     * @return BodyResponseBuilder
+     */
+    public static BodyResponseBuilder builder(HttpStatus data){
+        return new BodyResponseBuilder(data);
     }
 }

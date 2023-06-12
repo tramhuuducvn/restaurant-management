@@ -3,28 +3,30 @@ package com.sdc.restaurantmanagement.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
+@Data
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Data
 @Table(name = "menu_item")
 public class MenuItem {
     @Id
-    @SequenceGenerator(
-        name = "menu_item_sequence",
-        sequenceName = "menu_item_sequence",
-        allocationSize = 1 // increment by 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Long id;
-
-//    @Column(nullable = false, unique = true, length = 300)
     private String name;
     private String description;
-    private double price;
+    private Double price;
     private String imageUrl;
     private String type;
+    private Boolean deleted = false;
+
+    @ManyToMany(mappedBy = "menuItems")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<BillOrder> billOrders;
+
 }

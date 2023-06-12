@@ -1,28 +1,27 @@
 package com.sdc.restaurantmanagement.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.Date;
 
+@Data
 @Getter
 @Setter
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bill_order")
 @Entity
 public class BillOrder {
     @Id
-    @SequenceGenerator(
-            name = "bill_order_sequence",
-            sequenceName = "bill_order_sequence",
-            allocationSize = 1 // increment by 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Long id;
-    //   @Column(nullable = false, unique = true, length = 300)
-    private ConcurrentHashMap<MenuItem, Long> items;
     private Date orderedTime;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(name = "bill_order_menu_item", joinColumns = @JoinColumn(name = "bill_id"), inverseJoinColumns = @JoinColumn(name = "menu_item_id"))
+    private Collection<MenuItem> menuItems;
 }
