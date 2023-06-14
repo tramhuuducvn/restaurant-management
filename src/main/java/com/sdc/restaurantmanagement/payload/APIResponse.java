@@ -1,7 +1,10 @@
 package com.sdc.restaurantmanagement.payload;
 
-import lombok.*;
-import org.springframework.http.HttpStatus;
+import lombok.Getter;
+import lombok.Data;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+
 
 /**
  * Declare response data template
@@ -12,22 +15,13 @@ import org.springframework.http.HttpStatus;
 @Setter
 @AllArgsConstructor
 public class APIResponse {
-    private final int status; // required
-    private final String statusText; // required
     private final String message;
     private final Object data;
 
     //Builder class
     public static class BodyResponseBuilder {
-        private int status;
-        private String statusText;
         private String message;
         private Object data;
-
-        public BodyResponseBuilder(HttpStatus status){
-            this.status = status.value();
-            this.statusText = status.toString();
-        }
 
         /**
          * Build message
@@ -54,16 +48,15 @@ public class APIResponse {
          * @return BodyResponse
          */
         public APIResponse build(){
-            return new APIResponse(this.status, this.statusText, this.message, this.data);
+            return new APIResponse(this.message, this.data);
         }
     }
 
     /**
      * Get Builder of BodyResponse class, using for build BodyResponse
-     * @param data required field of BodyResponse
      * @return BodyResponseBuilder
      */
-    public static BodyResponseBuilder builder(HttpStatus data){
-        return new BodyResponseBuilder(data);
+    public static BodyResponseBuilder builder(){
+        return new BodyResponseBuilder();
     }
 }

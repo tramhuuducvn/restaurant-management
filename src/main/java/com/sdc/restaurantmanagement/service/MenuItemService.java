@@ -46,4 +46,13 @@ public interface MenuItemService {
      */
     boolean delete(Long id);
 
+    /**
+     * Find menu item by name, by description or by type
+     * @param name name of menu item
+     * @param description description of menu item
+     * @param type additional information
+     * @return list menu item
+     */
+    MenuResponse search(String name, String description, String type);
+
 }

@@ -11,18 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 
@@ -46,9 +37,9 @@ public class MenuItemController {
      * @return body response contain menu items data
      */
     @GetMapping(value = "")
-    public APIResponse getAll(){
+    public ResponseEntity<APIResponse> getAll(){
         MenuResponse results = menuItemService.getAll();
-        return APIResponse.builder(HttpStatus.OK).message("Get list of dishes in menu successful").data(results).build();
+        return new ResponseEntity<>(APIResponse.builder().message("Get list of dishes in menu successful").data(results).build(), HttpStatus.OK) ;
     }
 
     /**
@@ -57,9 +48,9 @@ public class MenuItemController {
      * @return MenuItemDTO
      */
     @GetMapping(value = "/{id}")
-    public APIResponse getById(@PathVariable Long id){
+    public ResponseEntity<APIResponse> getById(@PathVariable Long id){
         MenuItemDTO menuItemDTO = menuItemService.getById(id);
-        return APIResponse.builder(HttpStatus.OK).message("Menu item has been found").data(menuItemDTO).build();
+        return new ResponseEntity<>(APIResponse.builder().message("Menu item has been found").data(menuItemDTO).build(), HttpStatus.OK);
     }
 
     /**
@@ -69,9 +60,9 @@ public class MenuItemController {
      */
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public APIResponse create(@RequestBody MenuItemCreationRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> create(@RequestBody MenuItemCreationRequest request) throws MalformedURLException {
         menuItemService.create(request);
-        return APIResponse.builder(HttpStatus.CREATED).message("Create menu item successful").build();
+        return new ResponseEntity<>(APIResponse.builder().message("Create menu item successful").build(), HttpStatus.CREATED);
     }
 
     /**
@@ -81,9 +72,9 @@ public class MenuItemController {
      */
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public APIResponse update(@PathVariable Long id, @RequestBody MenuItemUpdateRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> update(@PathVariable Long id, @RequestBody MenuItemUpdateRequest request) throws MalformedURLException {
         menuItemService.update(id, request);
-        return APIResponse.builder(HttpStatus.NO_CONTENT).message("Menu item is updated").build();
+        return new ResponseEntity<>(APIResponse.builder().message("Menu item is updated").build(), HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -93,26 +84,20 @@ public class MenuItemController {
      */
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public APIResponse delete(@PathVariable Long id) {
+    public ResponseEntity<APIResponse> delete(@PathVariable Long id) {
         menuItemService.delete(id);
-        return APIResponse.builder(HttpStatus.NO_CONTENT).message("Menu item is deleted").build();
+        return new ResponseEntity<>(APIResponse.builder().message("Menu item is deleted").build(), HttpStatus.NO_CONTENT);
     }
 
 
-    @GetMapping(value = "/search/{number}")
-    public ResponseEntity<String> search(@PathVariable int number){
-        if(number == 1){
-            return new ResponseEntity<>(
-                    "Year of birth cannot be in the future",
-                    HttpStatus.BAD_REQUEST);
-        }
-        else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Custom-Header", "foo");
-
-            return new ResponseEntity<>(
-                    "Custom header set", headers, HttpStatus.OK);
-        }
-//        return APIResponse.builder(HttpStatus.OK).build();
+    @GetMapping(value = "/search")
+    public ResponseEntity<APIResponse> search(
+            @RequestParam(required = false, defaultValue = "") String name,
+            @RequestParam(required = false, defaultValue = "") String description,
+            @RequestParam(required = false, defaultValue = "") String type
+    ){
+        MenuResponse response = menuItemService.search(name, description, type);
+        String message = response.getTotalMenuItem() == 0 ? "No item found" : response.getTotalMenuItem() + " item found";
+         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.builder().message(message).data(response).build());
     }
 }

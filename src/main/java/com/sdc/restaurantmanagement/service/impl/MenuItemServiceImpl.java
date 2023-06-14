@@ -101,4 +101,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
         return false;
     }
+
+    @Override
+    public MenuResponse search(String name, String description, String type) {
+        List<MenuItemDTO> result = menuItemRepository.search(name, description, type)
+                .stream().map(MenuItemDTO::fromEntity).collect(Collectors.toList());
+
+        return MenuResponse.builder().items(result).totalMenuItem(result.size()).build();
+    }
 }

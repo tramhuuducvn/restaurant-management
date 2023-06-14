@@ -32,6 +32,7 @@ public class MenuItemDTO  {
         }
         return MenuItemDTO.builder()
                 .id(entity.getId())
+                .name(entity.getName())
                 .description(entity.getDescription())
                 .price(entity.getPrice())
                 .imageUrl(entity.getImageUrl())

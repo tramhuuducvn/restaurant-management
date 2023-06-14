@@ -5,6 +5,7 @@ import com.sdc.restaurantmanagement.payload.APIResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,9 +25,9 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public APIResponse handleAllException(Exception exception){
+    public ResponseEntity<APIResponse> handleAllException(Exception exception){
         exception.printStackTrace();
-        return APIResponse.builder(HttpStatus.INTERNAL_SERVER_ERROR).message(exception.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.builder().message(exception.getMessage()).build());
     }
 
     /**
@@ -36,9 +37,9 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public APIResponse handleNoSuchElementException(NoSuchElementException exception){
+    public ResponseEntity<APIResponse> handleNoSuchElementException(NoSuchElementException exception){
         exception.printStackTrace();
-        return APIResponse.builder(HttpStatus.NOT_FOUND).message(exception.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.builder().message(exception.getMessage()).build());
     }
 
     /**
@@ -47,10 +48,9 @@ public class ApiExceptionHandler {
      * @return ERROR Response to client.
      */
     @ExceptionHandler(InvalidFormatException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public APIResponse handleInvalidFormatException(InvalidFormatException exception){
+    public ResponseEntity<APIResponse> handleInvalidFormatException(InvalidFormatException exception){
         exception.printStackTrace();
-        return APIResponse.builder(HttpStatus.BAD_REQUEST).message(exception.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.builder().message(exception.getMessage()).build());
     }
 
     /**
@@ -59,10 +59,9 @@ public class ApiExceptionHandler {
      * @return ERROR Response to client.
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public APIResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
+    public ResponseEntity<APIResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
         exception.printStackTrace();
-        return APIResponse.builder(HttpStatus.BAD_REQUEST).message(exception.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.builder().message(exception.getMessage()).build());
     }
 
 
@@ -73,9 +72,9 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(MalformedURLException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public APIResponse handleMalformedURLException(MalformedURLException exception){
+    public ResponseEntity<APIResponse> handleMalformedURLException(MalformedURLException exception){
         exception.printStackTrace();
-        return APIResponse.builder(HttpStatus.BAD_REQUEST).message(exception.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST) .body(APIResponse.builder().message(exception.getMessage()).build());
     }
 
 }

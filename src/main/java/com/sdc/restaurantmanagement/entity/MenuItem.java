@@ -7,18 +7,14 @@ import lombok.Setter;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.ManyToMany;
 import javax.persistence.Column;
 import java.net.MalformedURLException;
-import java.util.Collection;
 
 @Data
 @Getter
@@ -39,11 +35,6 @@ public class MenuItem {
     private String type;
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted;
-
-    @ManyToMany(mappedBy = "menuItems")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Collection<BillOrder> billOrders;
 
     public void setImageUrl(String imageUrl) throws MalformedURLException {
         if(!Helper.isValidURL(imageUrl)){

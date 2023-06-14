@@ -43,7 +43,7 @@ public class MenuItemServiceImplTest {
     @BeforeEach
     public void setUp() throws Exception {
         // Mock for testGetMenu_ListMenu_IfGetSuccess
-        MenuItem menuItem = new MenuItem(1L, "Pizza", "Pizza so good", 1.1, "", "some type", false,null);
+        MenuItem menuItem = new MenuItem(1L, "Pizza", "Pizza so good", 1.1, "", "some type", false);
         List<MenuItem> list = new ArrayList<>();
         list.add(menuItem);
         Mockito.when(repository.findAllByDeleted(false)).thenReturn(list);
