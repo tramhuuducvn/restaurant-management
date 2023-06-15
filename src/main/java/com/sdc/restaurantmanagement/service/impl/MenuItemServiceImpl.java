@@ -76,7 +76,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     public void update(Long id, MenuItemUpdateRequest request) throws MalformedURLException, NoSuchElementException {
         MenuItem item = menuItemRepository.findById(id).orElse(null);
-        if (item == null || item.getDeleted()) {
+        if (item == null || item.isDeleted()) {
             throw new NoSuchElementException("Can't find the menu item with id " + id);
         }
 

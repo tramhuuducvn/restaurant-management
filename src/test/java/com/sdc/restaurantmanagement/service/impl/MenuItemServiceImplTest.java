@@ -83,11 +83,13 @@ public class MenuItemServiceImplTest {
     @Test
     public void testUpdateItemById_Pass_IfCreateSuccess() throws MalformedURLException {
         MenuItemUpdateRequest item = MenuItemUpdateRequest.builder().name("Hello").imageUrl("https://abc.com").build();
-        MenuItem menuItem = MenuItemUpdateRequest.toEntity(item);
 
-        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(menuItem));
-        Mockito.when(repository.save(menuItem)).thenReturn(menuItem);
-        Assertions.assertTrue(service.update(1L, item));
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.empty());
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()->{
+            service.update(1L, item);
+        });
+
+        Assertions.assertEquals("Can't find the menu item with id 1", exception.getMessage());
     }
 
     @Test

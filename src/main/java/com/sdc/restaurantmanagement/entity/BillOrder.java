@@ -10,8 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Getter
@@ -25,11 +25,12 @@ public class BillOrder {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createTime;
     private Date orderTime;
 
     @OneToMany(targetEntity = BillMenuItem.class, mappedBy = "billOrder",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<BillMenuItem> items;
+    private List<BillMenuItem> items;
 }
