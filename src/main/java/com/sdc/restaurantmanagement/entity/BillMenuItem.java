@@ -26,7 +26,8 @@ public class BillMenuItem {
     @GeneratedValue
     private Long id;
     private Integer number;
-    private Date updateTime;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 
     @ManyToOne(optional = false, targetEntity = MenuItem.class)
     @JoinColumn(name = "menu_item_id")

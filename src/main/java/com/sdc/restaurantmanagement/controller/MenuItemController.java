@@ -1,15 +1,11 @@
 package com.sdc.restaurantmanagement.controller;
 
 import com.sdc.restaurantmanagement.payload.APIResponse;
-import com.sdc.restaurantmanagement.payload.dto.MenuItemDTO;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
+import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
 import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.service.MenuItemService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +41,7 @@ public class MenuItemController {
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<APIResponse> getById(@PathVariable Long id){
-        MenuItemDTO menuItemDTO = menuItemService.getById(id);
+        MenuItemResponse menuItemDTO = menuItemService.getById(id);
         return new ResponseEntity<>(APIResponse.builder().message("Menu item has been found").data(menuItemDTO).build(), HttpStatus.OK);
     }
 
@@ -56,7 +52,7 @@ public class MenuItemController {
      */
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<APIResponse> create(@RequestBody MenuItemCreationRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> create(@RequestBody MenuItemCreateRequest request) throws MalformedURLException {
         menuItemService.create(request);
         return new ResponseEntity<>(APIResponse.builder().message("Create menu item successful").build(), HttpStatus.CREATED);
     }

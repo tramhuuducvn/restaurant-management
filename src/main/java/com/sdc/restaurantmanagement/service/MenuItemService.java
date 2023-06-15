@@ -1,7 +1,7 @@
 package com.sdc.restaurantmanagement.service;
 
-import com.sdc.restaurantmanagement.payload.dto.MenuItemDTO;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
+import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
 import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public interface MenuItemService {
      * @param id id of menu item
      * @return MenuItemDTO
      */
-    MenuItemDTO getById(Long id);
+    MenuItemResponse getById(Long id);
 
     /**
      * Create new menu item
      * @param request data request
      * @return true if create successful, otherwise return false
      */
-    boolean create(MenuItemCreationRequest request) throws MalformedURLException;
+    boolean create(MenuItemCreateRequest request) throws MalformedURLException;
 
     /**
      * Update menu item by id.
@@ -37,7 +37,7 @@ public interface MenuItemService {
      * @param request new data update to current.
      * @return true if update success.
      */
-    boolean update(Long id, MenuItemUpdateRequest request) throws MalformedURLException;
+    void update(Long id, MenuItemUpdateRequest request) throws MalformedURLException;
 
     /**
      * Delete menu item by id

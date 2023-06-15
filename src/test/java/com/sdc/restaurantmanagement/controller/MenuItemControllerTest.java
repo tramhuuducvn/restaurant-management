@@ -1,7 +1,7 @@
 package com.sdc.restaurantmanagement.controller;
 
 import com.sdc.restaurantmanagement.RestaurantManagementApplication;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
 import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
 import com.sdc.restaurantmanagement.util.Helper;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class MenuItemControllerTest {
     @Test
     @DisplayName("Test create menu item by id will pass when menu item exist in database")
     public void testCreateMenuItem_Pass_IfMenuItemExists() throws Exception {
-        MenuItemCreationRequest item = MenuItemCreationRequest.builder()
+        MenuItemCreateRequest item = MenuItemCreateRequest.builder()
                 .name("Test name 1")
                 .description("Test description 2")
                 .price(10.0)

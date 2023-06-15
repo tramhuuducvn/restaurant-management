@@ -1,7 +1,7 @@
 package com.sdc.restaurantmanagement.service.impl;
 
 import com.sdc.restaurantmanagement.entity.MenuItem;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreationRequest;
+import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
 import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.repository.MenuItemRepository;
@@ -74,8 +74,8 @@ public class MenuItemServiceImplTest {
 
     @Test
     public void testCreateItemById_Pass_IfCreateSuccess() throws MalformedURLException {
-        MenuItemCreationRequest item = MenuItemCreationRequest.builder().name("Hello").imageUrl("https://abc.com").build();
-        MenuItem menuItem = MenuItemCreationRequest.toEntity(item);
+        MenuItemCreateRequest item = MenuItemCreateRequest.builder().name("Hello").imageUrl("https://abc.com").build();
+        MenuItem menuItem = MenuItemCreateRequest.toEntity(item);
         Mockito.when(repository.save(menuItem)).thenReturn(menuItem);
         Assertions.assertTrue(service.create(item));
     }

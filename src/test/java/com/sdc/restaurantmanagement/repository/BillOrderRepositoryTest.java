@@ -30,9 +30,8 @@ public class BillOrderRepositoryTest {
 
     @Test
     public void testSave(){
-
         BillOrder bill = BillOrder.builder()
-                .orderedTime(new Date())
+                .orderTime(new Date())
                 .build();
 
         BillOrder createdBill = repository.save(bill);
@@ -44,10 +43,8 @@ public class BillOrderRepositoryTest {
         for(MenuItem  menuItem : list){
             items.add(BillMenuItem.builder().billOrder(createdBill).menuItem(menuItem).build());
         }
-        items.add(BillMenuItem.builder().billOrder(createdBill).menuItem(list.get(0)).build());
 
         createdBill.setItems(items);
-
         repository.save(createdBill);
     }
 

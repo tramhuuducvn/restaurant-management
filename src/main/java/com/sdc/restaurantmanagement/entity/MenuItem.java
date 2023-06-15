@@ -33,6 +33,7 @@ public class MenuItem {
     private Double price;
     private String imageUrl;
     private String type;
+
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted;
 

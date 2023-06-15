@@ -17,14 +17,14 @@ import java.net.MalformedURLException;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItemCreationRequest {
+public class MenuItemCreateRequest {
     private String name;
     private String description;
     private Double price;
     private String imageUrl;
     private String type;
 
-    public static MenuItem toEntity(MenuItemCreationRequest request) throws MalformedURLException {
+    public static MenuItem toEntity(MenuItemCreateRequest request) throws MalformedURLException {
         if(!Helper.isValidURL(request.imageUrl)) {
             throw new MalformedURLException("Image URL is invalid");
         }

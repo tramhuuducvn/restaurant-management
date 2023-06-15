@@ -1,8 +1,6 @@
 package com.sdc.restaurantmanagement.payload.response;
 
-import com.sdc.restaurantmanagement.payload.dto.MenuItemDTO;
 import lombok.Getter;
-import lombok.Data;
 import lombok.Setter;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -17,5 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class MenuResponse {
     private int totalMenuItem;
-    private List<MenuItemDTO> items;
+    private List<MenuItemResponse> items;
 }

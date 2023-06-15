@@ -1,4 +1,4 @@
-package com.sdc.restaurantmanagement.payload.dto;
+package com.sdc.restaurantmanagement.payload.response;
 
 import com.sdc.restaurantmanagement.entity.MenuItem;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItemDTO  {
+public class MenuItemResponse {
     private Long id;
     private String name;
     private String description;
@@ -26,11 +26,11 @@ public class MenuItemDTO  {
      * @param entity MenuItem collect from the database
      * @return MenuItemDTO
      */
-    public static MenuItemDTO fromEntity(MenuItem entity){
+    public static MenuItemResponse fromEntity(MenuItem entity){
         if(entity == null){
             return null;
         }
-        return MenuItemDTO.builder()
+        return MenuItemResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
