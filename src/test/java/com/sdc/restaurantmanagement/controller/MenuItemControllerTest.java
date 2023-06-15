@@ -90,4 +90,12 @@ class MenuItemControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
+
+    @Test
+    @DisplayName("Test search menu items will pass when return list menu items success")
+    public void testSearchMenuItem_Pass_whenGetMenuItemsSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/menu-items/search?name=a").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
 }

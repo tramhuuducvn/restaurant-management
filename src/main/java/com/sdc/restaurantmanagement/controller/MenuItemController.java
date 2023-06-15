@@ -22,10 +22,6 @@ import java.net.MalformedURLException;
  * Receive requests from client related to menu item.
  * And response the relevant data according to client's request.
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @RestController
 @RequestMapping(value = "/menu-items")
 public class MenuItemController {

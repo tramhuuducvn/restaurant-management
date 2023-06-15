@@ -91,9 +91,16 @@ public class MenuItemServiceImplTest {
     }
 
     @Test
-    public void testDeleteItemById_Pass_IfCreateSuccess() throws MalformedURLException {
+    public void testDeleteItemById_Pass_IfCreateSuccess() {
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(new MenuItem()));
         Mockito.when(repository.save(null)).thenReturn(null);
         Assertions.assertTrue(service.delete(1L));
+    }
+
+    @Test
+    public void testSearchMenuItem_Pass_FindItemSuccess() {
+        Mockito.when(repository.search("a", "b", "c")).thenReturn(new ArrayList<>());
+        MenuResponse res = service.search("a", "b", "c");
+        Assertions.assertEquals(0, res.getTotalMenuItem());
     }
 }
