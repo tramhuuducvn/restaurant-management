@@ -32,6 +32,10 @@ dependencies {
 	testImplementation 'junit:junit:4.13.1'
 	implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-core
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-core', version: '1.1.49'
 }
 
 tasks.named('test') {

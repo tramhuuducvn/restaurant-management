@@ -2,9 +2,19 @@ package com.sdc.restaurantmanagement.service;
 
 import com.sdc.restaurantmanagement.payload.request.BillMenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.BillOrderResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Handle logic for all features of bill order that mean:
+ * + How to get all bill orders
+ * + How to create a bill order
+ * + How to add a menu item to bill order
+ * + How to remove a menu item from bill order
+ * + How to update quantity for menu item in bill order
+ */
+@Service
 public interface BillOrderService {
     /**
      * Get all bill orders

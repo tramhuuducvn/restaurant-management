@@ -1,6 +1,7 @@
 package com.sdc.restaurantmanagement.entity;
 
 import com.sdc.restaurantmanagement.util.Helper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Data;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import java.net.MalformedURLException;
 public class MenuItem {
     @Id
     @GeneratedValue
+    @Schema(description = "Menu Item UUID in the database")
     private Long id;
     private String name;
     private String description;

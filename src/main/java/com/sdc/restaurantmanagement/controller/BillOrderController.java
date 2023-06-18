@@ -20,8 +20,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+/**
+ * Receive request from client related to bill orders like:
+ * + listing all bill orders
+ * + detail a bill order by id
+ * + create bill
+ * + add menu item to bill
+ * + remove menu item from bill
+ * + update quantity to a menu item of a bill order
+ */
 @RestController
-@RequestMapping(value="/bill-orders")
+@RequestMapping(value = "/bill-orders")
 public class BillOrderController {
     @Autowired
     private BillOrderService billOrderService;
