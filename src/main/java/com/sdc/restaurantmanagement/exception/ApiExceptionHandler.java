@@ -2,10 +2,7 @@ package com.sdc.restaurantmanagement.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sdc.restaurantmanagement.payload.APIResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,7 +14,16 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    /**
+     * Common handle exception function.
+     * @param exception exception.
+     * @return Response detail error or exception occurred.
+     */
+    private APIResponse handleException(Exception exception) {
+        exception.printStackTrace();
+        return APIResponse.builder().message(exception.getMessage()).build();
+    }
+
     /**
      * Catch all type of exception.
      * @param exception Exception threw by some function.
@@ -25,9 +31,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<APIResponse> handleAllException(Exception exception){
-        exception.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.builder().message(exception.getMessage()).build());
+    public APIResponse catchAllException(Exception exception){
+        return this.handleException(exception);
     }
 
     /**
@@ -37,9 +42,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<APIResponse> handleNoSuchElementException(NoSuchElementException exception){
-        exception.printStackTrace();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(APIResponse.builder().message(exception.getMessage()).build());
+    public APIResponse handleNoSuchElementException(NoSuchElementException exception){
+        return this.handleException(exception);
     }
 
     /**
@@ -47,34 +51,20 @@ public class ApiExceptionHandler {
      * @param exception InvalidFormatException threw by some function.
      * @return ERROR Response to client.
      */
-    @ExceptionHandler(InvalidFormatException.class)
-    public ResponseEntity<APIResponse> handleInvalidFormatException(InvalidFormatException exception){
-        exception.printStackTrace();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.builder().message(exception.getMessage()).build());
-    }
-
-    /**
-     * Catch all type of HttpMessageNotReadableException (ex: item doesn't exist).
-     * @param exception HttpMessageNotReadableException threw by some function.
-     * @return ERROR Response to client.
-     */
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<APIResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
-        exception.printStackTrace();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(APIResponse.builder().message(exception.getMessage()).build());
-    }
-
-
-    /**
-     * Catch all type of MalformedURLException (ex: invalid imageUrl).
-     * @param exception MalformedURLException threw by some function.
-     * @return ERROR Response to client.
-     */
-    @ExceptionHandler(MalformedURLException.class)
+    @ExceptionHandler({InvalidFormatException.class, HttpMessageNotReadableException.class, MalformedURLException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<APIResponse> handleMalformedURLException(MalformedURLException exception){
-        exception.printStackTrace();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST) .body(APIResponse.builder().message(exception.getMessage()).build());
+    public APIResponse handleInvalidFormatException(InvalidFormatException exception){
+        return this.handleException(exception);
     }
 
+    /**
+     * Handle exception occur when add an item, but it already exists in database.
+     * @param exception  AlreadyExistException throw by some function.
+     * @return ERROR response message.
+     */
+    @ExceptionHandler(AlreadyExistException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public APIResponse handleItemAlreadyExistException(AlreadyExistException exception){
+        return this.handleException(exception);
+    }
 }

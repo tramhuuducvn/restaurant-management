@@ -1,6 +1,5 @@
 package com.sdc.restaurantmanagement.payload.response;
 import com.sdc.restaurantmanagement.entity.BillMenuItem;
-import com.sdc.restaurantmanagement.entity.BillOrder;
 import com.sdc.restaurantmanagement.entity.MenuItem;
 import lombok.Getter;
 import lombok.Data;
@@ -8,12 +7,6 @@ import lombok.Setter;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import javax.persistence.*;
-
-import java.util.Date;
 
 @Data
 @Getter

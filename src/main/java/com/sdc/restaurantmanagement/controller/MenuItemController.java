@@ -2,14 +2,23 @@ package com.sdc.restaurantmanagement.controller;
 
 import com.sdc.restaurantmanagement.payload.APIResponse;
 import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
-import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
+import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.service.MenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
 
 import java.net.MalformedURLException;
 
@@ -30,8 +39,8 @@ public class MenuItemController {
      */
     @GetMapping(value = "")
     public ResponseEntity<APIResponse> getAll(){
-        MenuResponse results = menuItemService.getAll();
-        return new ResponseEntity<>(APIResponse.builder().message("Get list of dishes in menu successful").data(results).build(), HttpStatus.OK) ;
+        MenuResponse menuItems = menuItemService.getAll();
+        return new ResponseEntity<>(APIResponse.builder().message("Get list of dishes in menu successful").data(menuItems).build(), HttpStatus.OK) ;
     }
 
     /**
@@ -51,8 +60,7 @@ public class MenuItemController {
      * @return APIResponse represent created successful
      */
     @PostMapping(value = "")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<APIResponse> create(@RequestBody MenuItemCreateRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> create(@RequestBody MenuItemRequest request) throws MalformedURLException {
         menuItemService.create(request);
         return new ResponseEntity<>(APIResponse.builder().message("Create menu item successful").build(), HttpStatus.CREATED);
     }
@@ -63,8 +71,7 @@ public class MenuItemController {
      * @return true if update success, this method will return no content status.
      */
     @PutMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<APIResponse> update(@PathVariable Long id, @RequestBody MenuItemUpdateRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> update(@PathVariable Long id, @RequestBody MenuItemRequest request) throws MalformedURLException {
         menuItemService.update(id, request);
         return new ResponseEntity<>(APIResponse.builder().message("Menu item is updated").build(), HttpStatus.NO_CONTENT);
     }
@@ -75,7 +82,6 @@ public class MenuItemController {
      * @return true if delete success, this method will return no content status.
      */
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<APIResponse> delete(@PathVariable Long id) {
         menuItemService.delete(id);
         return new ResponseEntity<>(APIResponse.builder().message("Menu item is deleted").build(), HttpStatus.NO_CONTENT);

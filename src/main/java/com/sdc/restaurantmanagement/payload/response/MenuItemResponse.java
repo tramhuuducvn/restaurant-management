@@ -39,4 +39,26 @@ public class MenuItemResponse {
                 .type(entity.getType())
                 .build();
     }
+
+    public static MenuItem toEntity(MenuItemResponse item) {
+        return  MenuItem.builder()
+                .id(item.id)
+                .name(item.name)
+                .description(item.description)
+                .price(item.price)
+                .imageUrl(item.imageUrl)
+                .type(item.type)
+                .build();
+    }
+
+    public MenuItem toEntity() {
+        return  MenuItem.builder()
+                .id(this.id)
+                .name(this.name)
+                .description(this.description)
+                .price(this.price)
+                .imageUrl(this.imageUrl)
+                .type(this.type)
+                .build();
+    }
 }

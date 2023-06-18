@@ -35,7 +35,7 @@ public class MenuItem {
     private String type;
 
     @Column(columnDefinition = "boolean default false")
-    private boolean deleted;
+    private boolean isDeleted;
 
     public void setImageUrl(String imageUrl) throws MalformedURLException {
         if(!Helper.isValidURL(imageUrl)){

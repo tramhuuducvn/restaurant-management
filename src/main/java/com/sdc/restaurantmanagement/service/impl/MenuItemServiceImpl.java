@@ -1,8 +1,7 @@
 package com.sdc.restaurantmanagement.service.impl;
 
 import com.sdc.restaurantmanagement.entity.MenuItem;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
-import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
+import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.repository.MenuItemRepository;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,21 +20,21 @@ public class MenuItemServiceImpl implements MenuItemService {
     private MenuItemRepository menuItemRepository;
 
     /**
-     * Get menu data, list of dishes in menu
+     * Get all menu item in database
      *
-     * @return menu response data
+     * @return list menu item
      */
     @Override
     public MenuResponse getAll() {
-        List<MenuItemResponse> results = menuItemRepository
-                .findAllByDeleted(false)
+        List<MenuItemResponse> menuItems = menuItemRepository
+                .findAllByIsDeleted(false)
                 .stream()
                 .map(MenuItemResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return MenuResponse.builder()
-                .totalMenuItem(results.size())
-                .items(results)
+                .totalMenuItem(menuItems.size())
+                .items(menuItems)
                 .build();
     }
 
@@ -48,12 +46,11 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuItemResponse getById(Long id) {
-        Optional<MenuItem> menuItem = menuItemRepository.findById(id);
-        MenuItemResponse itemDTO = MenuItemResponse.fromEntity(menuItem.orElse(null));
-        if (itemDTO == null) {
-            throw new NoSuchElementException("Menu item doesn't exist!");
+        MenuItem menuItem = menuItemRepository.findByIdAndIsDeletedFalse(id).orElse(null);
+        if (menuItem == null) {
+            throw new NoSuchElementException("Menu item with id " + id + " doesn't exist!");
         }
-        return itemDTO;
+        return MenuItemResponse.fromEntity(menuItem);
     }
 
     /**
@@ -62,8 +59,8 @@ public class MenuItemServiceImpl implements MenuItemService {
      * @param request data request
      * @return true if create successful, otherwise return false
      */
-    public boolean create(MenuItemCreateRequest request) throws MalformedURLException {
-        MenuItem menuItem = menuItemRepository.save(MenuItemCreateRequest.toEntity(request));
+    public boolean create(MenuItemRequest request) throws MalformedURLException {
+        MenuItem menuItem = menuItemRepository.save(MenuItemRequest.toEntity(request));
         return menuItem.getName().equals(request.getName());
     }
 
@@ -72,9 +69,8 @@ public class MenuItemServiceImpl implements MenuItemService {
      *
      * @param id      id of menu item.
      * @param request new data update to current.
-     * @return true if update success.
      */
-    public void update(Long id, MenuItemUpdateRequest request) throws MalformedURLException, NoSuchElementException {
+    public void update(Long id, MenuItemRequest request) throws MalformedURLException, NoSuchElementException {
         MenuItem item = menuItemRepository.findById(id).orElse(null);
         if (item == null || item.isDeleted()) {
             throw new NoSuchElementException("Can't find the menu item with id " + id);
@@ -92,16 +88,14 @@ public class MenuItemServiceImpl implements MenuItemService {
      * Delete menu item by id
      *
      * @param id id of menu item
-     * @return true
      */
-    public boolean delete(Long id) {
+    public void delete(Long id) {
         MenuItem item = menuItemRepository.findById(id).orElse(null);
-        if (item != null) {
-            item.setDeleted(true);
-            menuItemRepository.save(item);
-            return true;
+        if (item == null) {
+            throw new NoSuchElementException("Can't find the menu item with id " + id);
         }
-        return false;
+        item.setDeleted(true);
+        menuItemRepository.save(item);
     }
 
     @Override

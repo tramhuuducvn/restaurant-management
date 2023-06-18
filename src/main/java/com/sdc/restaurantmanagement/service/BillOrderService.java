@@ -32,7 +32,20 @@ public interface BillOrderService {
      * @param id      id of bill order
      * @param request request param contain menu_item_id and number want to add
      */
-    void updateBillMenuItem(Long id, BillMenuItemRequest request);
+    void addBillMenuItem(Long id, BillMenuItemRequest request);
 
+    /**
+     * Update quantity of item to bill id
+     *
+     * @param id      id of bill order
+     * @param request request param contain menu_item_id and number want to update
+     */
+    void updateMenuItemQuantity(Long id, BillMenuItemRequest request);
 
+    /**
+     * Remove Menu Item from bill order
+     * @param billId id of bill order
+     * @param menuItemId id of menu item want to remove
+     */
+    void removeBillMenuItem(Long billId, Long menuItemId);
 }

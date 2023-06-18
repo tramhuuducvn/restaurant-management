@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
-     List<MenuItem> findAllByDeleted(Boolean state);
+     List<MenuItem> findAllByIsDeleted(Boolean state);
+
+     Optional<MenuItem> findByIdAndIsDeletedFalse(Long id);
 
      /**
       * Query all menu items have at least a field match with the given information.

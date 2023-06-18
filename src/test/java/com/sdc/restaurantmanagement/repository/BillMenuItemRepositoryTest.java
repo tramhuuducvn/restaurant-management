@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class BillMenuItemRepositoryTest {
@@ -18,8 +15,13 @@ class BillMenuItemRepositoryTest {
     BillMenuItemRepository repository;
 
     @Test
-    public void test(){
-        BillMenuItem item = repository.findByMenuItemIdAndBillOrderId(1L, 36L).orElse(null);
+    public void testFindByBillOrderIdAndMenuItemId_Success_IfNoExceptionOccur(){
+        BillMenuItem item = repository.findByBillOrderIdAndMenuItemId(1L, 36L).orElse(null);
         System.out.println(item);
+    }
+
+    @Test
+    public void testSoftDeleteByBillOrderIdAndMenuItemId_Success_IfNoExceptionOccur(){
+        repository.softDeleteByBillOrderIdAndMenuItemId(36L, 12L);
     }
 }

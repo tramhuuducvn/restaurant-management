@@ -9,9 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.UniqueConstraint;
 
-import java.util.Date;
 
 @Data
 @Getter
@@ -27,7 +33,7 @@ public class BillMenuItem {
     private Long id;
     private Integer number;
     @Column(columnDefinition = "boolean default false")
-    private boolean deleted;
+    private boolean isDeleted;
 
     @ManyToOne(optional = false, targetEntity = MenuItem.class)
     @JoinColumn(name = "menu_item_id")

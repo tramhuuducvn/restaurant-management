@@ -1,8 +1,7 @@
 package com.sdc.restaurantmanagement.service.impl;
 
 import com.sdc.restaurantmanagement.entity.MenuItem;
-import com.sdc.restaurantmanagement.payload.request.MenuItemCreateRequest;
-import com.sdc.restaurantmanagement.payload.request.MenuItemUpdateRequest;
+import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.repository.MenuItemRepository;
 import com.sdc.restaurantmanagement.service.MenuItemService;
@@ -46,7 +45,7 @@ public class MenuItemServiceImplTest {
         MenuItem menuItem = new MenuItem(1L, "Pizza", "Pizza so good", 1.1, "", "some type", false);
         List<MenuItem> list = new ArrayList<>();
         list.add(menuItem);
-        Mockito.when(repository.findAllByDeleted(false)).thenReturn(list);
+        Mockito.when(repository.findAllByIsDeleted(false)).thenReturn(list);
 
         // Mock for testGetMenuItemById_Pass_IfNotFoundItem
         Mockito.when(repository.findById(2L)).thenReturn(Optional.empty());
@@ -65,29 +64,24 @@ public class MenuItemServiceImplTest {
 
     @Test
     public void testGetMenuItemById_Pass_IfNotFoundItem(){
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()->{
-                service.getById(2L);
-        }, "NoSuchElementException was expected");
-
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.getById(2L), "NoSuchElementException was expected");
         Assertions.assertEquals("Menu item doesn't exist!", exception.getMessage());
     }
 
     @Test
     public void testCreateItemById_Pass_IfCreateSuccess() throws MalformedURLException {
-        MenuItemCreateRequest item = MenuItemCreateRequest.builder().name("Hello").imageUrl("https://abc.com").build();
-        MenuItem menuItem = MenuItemCreateRequest.toEntity(item);
+        MenuItemRequest item = MenuItemRequest.builder().name("Hello").imageUrl("https://abc.com").build();
+        MenuItem menuItem = MenuItemRequest.toEntity(item);
         Mockito.when(repository.save(menuItem)).thenReturn(menuItem);
         Assertions.assertTrue(service.create(item));
     }
 
     @Test
-    public void testUpdateItemById_Pass_IfCreateSuccess() throws MalformedURLException {
-        MenuItemUpdateRequest item = MenuItemUpdateRequest.builder().name("Hello").imageUrl("https://abc.com").build();
+    public void testUpdateItemById_Pass_IfCreateSuccess() {
+        MenuItemRequest item = MenuItemRequest.builder().name("Hello").imageUrl("https://abc.com").build();
 
         Mockito.when(repository.findById(1L)).thenReturn(Optional.empty());
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()->{
-            service.update(1L, item);
-        });
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.update(1L, item));
 
         Assertions.assertEquals("Can't find the menu item with id 1", exception.getMessage());
     }
@@ -96,7 +90,7 @@ public class MenuItemServiceImplTest {
     public void testDeleteItemById_Pass_IfCreateSuccess() {
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(new MenuItem()));
         Mockito.when(repository.save(null)).thenReturn(null);
-        Assertions.assertTrue(service.delete(1L));
+        service.delete(1L);
     }
 
     @Test
