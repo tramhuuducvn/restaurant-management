@@ -18,12 +18,6 @@ class MenuItemRepositoryTest {
     private MenuItemRepository repository;
 
     @Test
-    void testFindAllByIsDeleted_3_IfFoundThreeItemDeleted() {
-        List<MenuItem> items = repository.findAllByIsDeleted(true);
-        Assertions.assertEquals(3, items.size());
-    }
-
-    @Test
     void testFindByIdAndIsDeletedFalse_NotNull_IfItemFound() {
         MenuItem item = repository.findByIdAndIsDeletedFalse(1L).orElse(null);
         Assertions.assertNotNull(item);
@@ -45,5 +39,11 @@ class MenuItemRepositoryTest {
     void testSearchByDescription_Two_ResultSizeIsOne() {
         List<MenuItem> items = repository.search("", "ea", "");
         Assertions.assertEquals(3, items.size());
+    }
+
+    @Test
+    void testFindAllByIsDeletedFalse() {
+        List<MenuItem> items = repository.findAllByIsDeletedFalse();
+        Assertions.assertEquals(19, items.size());
     }
 }

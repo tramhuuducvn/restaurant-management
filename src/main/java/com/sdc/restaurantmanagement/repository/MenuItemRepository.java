@@ -1,6 +1,8 @@
 package com.sdc.restaurantmanagement.repository;
 
 import com.sdc.restaurantmanagement.entity.MenuItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
-     List<MenuItem> findAllByIsDeleted(Boolean state);
+     List<MenuItem> findAllByIsDeletedFalse();
+//     List<MenuItem> findAllByIsDeletedFalse();
+
+     Page<MenuItem> findAllByIsDeletedFalse(Pageable pageable);
 
      Optional<MenuItem> findByIdAndIsDeletedFalse(Long id);
 
@@ -30,4 +35,5 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
              @Param("name") String name,
              @Param("description") String description,
              @Param("type") String type);
+
 }

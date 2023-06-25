@@ -47,7 +47,7 @@ public class MenuItemServiceImplTest {
         MenuItem menuItem = new MenuItem(1L, "Pizza", "Pizza so good", 1.1, "", "some type", false);
         List<MenuItem> list = new ArrayList<>();
         list.add(menuItem);
-        Mockito.when(repository.findAllByIsDeleted(false)).thenReturn(list);
+        Mockito.when(repository.findAllByIsDeletedFalse()).thenReturn(list);
 
         // Mock for testGetMenuItemById_Pass_IfNotFoundItem
         Mockito.when(repository.findById(2L)).thenReturn(Optional.empty());

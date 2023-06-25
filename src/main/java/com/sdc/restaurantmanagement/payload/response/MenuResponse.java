@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuResponse {
-    private int totalMenuItem;
+    private long totalMenuItem;
+    private int pageSize;
+    private boolean hasNextPage;
     private List<MenuItemResponse> items;
 }

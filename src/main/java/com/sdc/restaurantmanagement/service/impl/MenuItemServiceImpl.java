@@ -8,6 +8,8 @@ import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.repository.MenuItemRepository;
 import com.sdc.restaurantmanagement.service.MenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -34,14 +36,39 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuResponse getAll() {
         List<MenuItemResponse> menuItems = menuItemRepository
-                .findAllByIsDeleted(false)
+                .findAllByIsDeletedFalse()
                 .stream()
                 .map(MenuItemResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return MenuResponse.builder()
                 .totalMenuItem(menuItems.size())
+                .pageSize(menuItems.size())
+                .hasNextPage(false)
                 .items(menuItems)
+                .build();
+    }
+
+    /**
+     * Get menu items in database
+     * @param page page index
+     * @param size number item of each page
+     * @return list of {size} menu items at page {page}
+     */
+    @Override
+    public  MenuResponse getByPage(int page, int size){
+        Page<MenuItem> menuItemPage = menuItemRepository
+                .findAllByIsDeletedFalse(PageRequest.of(page, size));
+
+        List<MenuItemResponse> menuItemResponses = menuItemPage.stream()
+                .map(MenuItemResponse::fromEntity)
+                .collect(Collectors.toList());
+
+        return MenuResponse.builder()
+                .items(menuItemResponses)
+                .hasNextPage(menuItemPage.hasNext())
+                .pageSize(menuItemResponses.size())
+                .totalMenuItem(menuItemPage.getTotalElements())
                 .build();
     }
 

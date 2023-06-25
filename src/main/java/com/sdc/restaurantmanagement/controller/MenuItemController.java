@@ -43,8 +43,14 @@ public class MenuItemController {
     })
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
-    public APIResponse getAll() {
-        MenuResponse menuItems = menuItemService.getAll();
+    public APIResponse getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        MenuResponse menuItems;
+        if(page == null || size == null){
+            menuItems = menuItemService.getAll();
+        }
+        else {
+            menuItems = menuItemService.getByPage(page, size);
+        }
         return APIResponse.builder().message("Get list of dishes in menu successful").data(menuItems).build();
     }
 
@@ -119,9 +125,10 @@ public class MenuItemController {
 
     /**
      * Search menu items in the database
-     * @param name name of menu item
+     *
+     * @param name        name of menu item
      * @param description description of menu item
-     * @param type type that is addition information of menu item
+     * @param type        type that is addition information of menu item
      * @return list of menu item matched with the given field
      */
     @GetMapping(value = "/search")

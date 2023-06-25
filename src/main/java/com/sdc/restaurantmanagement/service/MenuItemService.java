@@ -16,11 +16,20 @@ import java.net.MalformedURLException;
 @Service
 public interface MenuItemService {
     /**
-     * Get all menu item in database
+     * Get all menu items in database
      *
      * @return list menu item
      */
     MenuResponse getAll();
+
+    /**
+     * Get menu items in database
+     * @param page page index
+     * @param size number item of each page
+     * @return list of {size} menu items at page {page}
+     */
+    MenuResponse getByPage(int page, int size);
+
 
     /**
      * Get menu item by id
