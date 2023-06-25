@@ -41,8 +41,9 @@ public interface BillOrderService {
      *
      * @param id      id of bill order
      * @param request request param contain menu_item_id and number want to add
+     * @return
      */
-    void addBillMenuItem(Long id, BillMenuItemRequest request);
+    void addBillMenuItem(Long id, BillMenuItemRequest request) throws Exception;
 
     /**
      * Update quantity of item to bill id
@@ -50,12 +51,18 @@ public interface BillOrderService {
      * @param id      id of bill order
      * @param request request param contain menu_item_id and number want to update
      */
-    void updateMenuItemQuantity(Long id, BillMenuItemRequest request);
+    void updateMenuItemQuantity(Long id, BillMenuItemRequest request) throws Exception;
 
     /**
      * Remove Menu Item from bill order
      * @param billId id of bill order
      * @param menuItemId id of menu item want to remove
      */
-    void removeBillMenuItem(Long billId, Long menuItemId);
+    void removeBillMenuItem(Long billId, Long menuItemId) throws Exception;
+
+    /**
+     * paid and export bill order
+     * @param id id of bill order
+     */
+    void payBillOrder(Long id) throws Exception;
 }

@@ -16,16 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 
@@ -34,7 +25,7 @@ import java.net.MalformedURLException;
  * Receive requests from client related to menu item.
  * And response the relevant data according to client's request.
  */
-@Tag(name = "Menu Item")
+@Tag(name = "Menu Item APIs", description = "REST APIs for Menu Item Collections")
 @RestController
 @RequestMapping(value = "/menu-items")
 public class MenuItemController {
@@ -46,18 +37,15 @@ public class MenuItemController {
      *
      * @return body response contain menu items data
      */
-    @Operation(description = "Listing menu items", responses = {
-            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = MenuItem.class))), responseCode = "200")
-    })
+    @Operation(summary = "Listing menu items", description = "Show list menu items that have not been deleted")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
     })
     @GetMapping(value = "")
-    public ResponseEntity<APIResponse> getAll() {
+    @ResponseStatus(HttpStatus.OK)
+    public APIResponse getAll() {
         MenuResponse menuItems = menuItemService.getAll();
-        return new ResponseEntity<>(APIResponse.builder().message("Get list of dishes in menu successful").data(menuItems).build(), HttpStatus.OK);
+        return APIResponse.builder().message("Get list of dishes in menu successful").data(menuItems).build();
     }
 
     /**
@@ -66,10 +54,15 @@ public class MenuItemController {
      * @param id id of menu item
      * @return MenuItemDTO
      */
+    @Operation(summary = "Get menu item by id", description = "Show information of menu item have the given id")
+    @ApiResponses(value = {
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
+    })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> getById(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public APIResponse getById(@PathVariable Long id) {
         MenuItemResponse menuItemDTO = menuItemService.getById(id);
-        return new ResponseEntity<>(APIResponse.builder().message("Menu item has been found").data(menuItemDTO).build(), HttpStatus.OK);
+        return APIResponse.builder().message("Menu item has been found").data(menuItemDTO).build();
     }
 
     /**
@@ -78,10 +71,15 @@ public class MenuItemController {
      * @param request data need to create a menu item, under json data type.
      * @return APIResponse represent created successful
      */
+    @Operation(summary = "Create menu item", description = "Create a menu item with the given information and add it to the database")
+    @ApiResponses(value = {
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
+    })
     @PostMapping(value = "")
-    public ResponseEntity<APIResponse> create(@RequestBody MenuItemRequest request) throws MalformedURLException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public APIResponse create(@RequestBody MenuItemRequest request) throws MalformedURLException {
         menuItemService.create(request);
-        return new ResponseEntity<>(APIResponse.builder().message("Create menu item successful").build(), HttpStatus.CREATED);
+        return APIResponse.builder().message("Create menu item successful").build();
     }
 
     /**
@@ -90,10 +88,15 @@ public class MenuItemController {
      * @param id id of menu item
      * @return true if update success, this method will return no content status.
      */
+    @Operation(summary = "Update menu item", description = "Find the menu items with the given id, if found item -> update it orElse return 404 and an message error")
+    @ApiResponses(value = {
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
+    })
     @PutMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> update(@PathVariable Long id, @RequestBody MenuItemRequest request) throws MalformedURLException {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public APIResponse update(@PathVariable Long id, @RequestBody MenuItemRequest request) throws MalformedURLException {
         menuItemService.update(id, request);
-        return new ResponseEntity<>(APIResponse.builder().message("Menu item is updated").build(), HttpStatus.NO_CONTENT);
+        return APIResponse.builder().message("Menu item is updated").build();
     }
 
     /**
@@ -102,14 +105,30 @@ public class MenuItemController {
      * @param id id of menu item
      * @return true if delete success, this method will return no content status.
      */
+    @Operation(summary = "Delete menu item", description = "Find the menu items with the given id, if found item -> soft delete it (just update the isDeleted value to True) orElse return 404 and an message error")
+    @ApiResponses(value = {
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
+    })
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public APIResponse delete(@PathVariable Long id) {
         menuItemService.delete(id);
-        return new ResponseEntity<>(APIResponse.builder().message("Menu item is deleted").build(), HttpStatus.NO_CONTENT);
+        return APIResponse.builder().message("Menu item is deleted").build();
     }
 
 
+    /**
+     * Search menu items in the database
+     * @param name name of menu item
+     * @param description description of menu item
+     * @param type type that is addition information of menu item
+     * @return list of menu item matched with the given field
+     */
     @GetMapping(value = "/search")
+    @Operation(summary = "Search menu items", description = "Listing the menu items matched with the given field")
+    @ApiResponses(value = {
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
+    })
     public ResponseEntity<APIResponse> search(
             @RequestParam(required = false, defaultValue = "") String name,
             @RequestParam(required = false, defaultValue = "") String description,

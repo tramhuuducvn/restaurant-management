@@ -1,7 +1,9 @@
 package com.sdc.restaurantmanagement.service.impl;
 
+import com.sdc.restaurantmanagement.constant.Constant;
 import com.sdc.restaurantmanagement.entity.MenuItem;
 import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
+import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
 import com.sdc.restaurantmanagement.payload.response.MenuResponse;
 import com.sdc.restaurantmanagement.repository.MenuItemRepository;
 import com.sdc.restaurantmanagement.service.MenuItemService;
@@ -57,15 +59,22 @@ public class MenuItemServiceImplTest {
     }
     
     @Test
-    public void testGetMenu_ListMenu_IfGetSuccess(){
+    public void testGetAllMenu_ListMenu_IfGetSuccess(){
         MenuResponse result = service.getAll();
         Assertions.assertEquals(1, result.getTotalMenuItem());
     }
 
     @Test
-    public void testGetMenuItemById_Pass_IfNotFoundItem(){
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.getById(2L), "NoSuchElementException was expected");
-        Assertions.assertEquals("Menu item doesn't exist!", exception.getMessage());
+    public void testGetMenuItemById_Pass_IfItemFound() {
+        Mockito.when(repository.findByIdAndIsDeletedFalse(Mockito.anyLong())).thenReturn(Optional.of(MenuItem.builder().price(1.0).build()));
+        MenuItemResponse item = service.getById(Mockito.anyLong());
+        Assertions.assertNotNull(item);
+    }
+
+    @Test
+    public void testGetMenuItemById_Pass_IfItemNotFound(){
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.getById(1L), "NoSuchElementException was expected");
+        Assertions.assertEquals("Menu item with id " + 1 + " doesn't exist!", exception.getMessage());
     }
 
     @Test
@@ -77,20 +86,40 @@ public class MenuItemServiceImplTest {
     }
 
     @Test
-    public void testUpdateItemById_Pass_IfCreateSuccess() {
+    public void testCreateItemById_Failed_IfImgUrlIsInvalid() throws MalformedURLException {
+        MenuItemRequest item = MenuItemRequest.builder().name("Hello").imageUrl("https:// abc.com").build();
+
+        Exception exception = Assertions.assertThrows(MalformedURLException.class, ()->{
+            MenuItem menuItem = MenuItemRequest.toEntity(item);
+            Mockito.when(repository.save(menuItem)).thenReturn(menuItem);
+        });
+        Assertions.assertEquals(Constant.INVALID_URL_EXCEPTION, exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateItemById_Pass_IfItemNotFound() {
         MenuItemRequest item = MenuItemRequest.builder().name("Hello").imageUrl("https://abc.com").build();
 
         Mockito.when(repository.findById(1L)).thenReturn(Optional.empty());
         NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.update(1L, item));
 
-        Assertions.assertEquals("Can't find the menu item with id 1", exception.getMessage());
+        Assertions.assertEquals(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + "1", exception.getMessage());
     }
 
     @Test
-    public void testDeleteItemById_Pass_IfCreateSuccess() {
+    public void testDeleteItemById_Pass_IfUpdateSuccess() {
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(new MenuItem()));
         Mockito.when(repository.save(null)).thenReturn(null);
         service.delete(1L);
+    }
+
+    @Test
+    public void testDeleteItemById_Pass_IfItemNotFound() {
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(repository.save(null)).thenReturn(null);
+        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, ()-> service.delete(1L));
+
+        Assertions.assertEquals(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + "1", exception.getMessage());
     }
 
     @Test

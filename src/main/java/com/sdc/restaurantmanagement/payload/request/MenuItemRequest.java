@@ -1,5 +1,6 @@
 package com.sdc.restaurantmanagement.payload.request;
 
+import com.sdc.restaurantmanagement.constant.Constant;
 import com.sdc.restaurantmanagement.entity.MenuItem;
 import com.sdc.restaurantmanagement.util.Helper;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class MenuItemRequest {
 
     public static MenuItem toEntity(MenuItemRequest request) throws MalformedURLException {
         if(!Helper.isValidURL(request.imageUrl)) {
-            throw new MalformedURLException("Image URL is invalid");
+            throw new MalformedURLException(Constant.INVALID_URL_EXCEPTION);
         }
         return  MenuItem.builder()
                 .name(request.name)

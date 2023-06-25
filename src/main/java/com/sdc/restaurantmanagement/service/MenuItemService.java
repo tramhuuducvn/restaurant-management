@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 
-
+/**
+ * Handle logic for all features of menu items that mean:
+ * + How to get all menu items
+ * + How to add/update/delete a menu items to menu
+ * + How to search items in menu
+ */
 @Service
 public interface MenuItemService {
     /**

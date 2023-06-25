@@ -40,16 +40,24 @@ class MenuItemControllerTest {
 
 
     @Test
-    @DisplayName("Test get menu item by id will pass when menu item exist in database")
-    public void testGetMenuItemById_Pass_IfMenuItemExists() throws Exception {
+    @DisplayName("Test get menu item by id will return 200 when the menu item exists in database")
+    public void testGetMenuItemById_200_IfMenuItemExists() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/menu-items/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    @DisplayName("Test create menu item by id will pass when menu item exist in database")
-    public void testCreateMenuItem_Pass_IfMenuItemExists() throws Exception {
+    @DisplayName("Test get menu item by id will return 404 when the menu item doesn't exist in database")
+    public void testGetMenuItemById_404_IfMenuItemNotExists() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/menu-items/1000").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Test create menu item will return 202 when menu item exists in database and all data is valid")
+    public void testCreateMenuItem_202_IfMenuItemExists() throws Exception {
         MenuItemRequest item = MenuItemRequest.builder()
                 .name("Test name 1")
                 .description("Test description 2")
@@ -57,6 +65,7 @@ class MenuItemControllerTest {
                 .imageUrl("https://abc.com.vn")
                 .type("")
                 .build();
+
         mockMvc.perform(MockMvcRequestBuilders.post("/menu-items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(Helper.toJSON(item)))
@@ -65,17 +74,79 @@ class MenuItemControllerTest {
     }
 
     @Test
-    @DisplayName("Test update menu item by id will pass when menu item exist in database")
-    public void testUpdateMenuItem_Pass_IfMenuItemExists() throws Exception {
+    @DisplayName("Test create menu item will return 400 when the imageUrl is invalid")
+    public void testCreateMenuItem_400_IfImgUrlInvalid() throws Exception {
         MenuItemRequest item = MenuItemRequest.builder()
                 .name("Test name 1")
                 .description("Test description 2")
                 .price(10.0)
+                .imageUrl("https://abc .com.vn")
+                .type("")
+                .build();
+        mockMvc.perform(MockMvcRequestBuilders.post("/menu-items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Helper.toJSON(item)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Test update menu item by id will return 202 when menu item exists in database and all data is valid")
+    public void testUpdateMenuItem_202_IfMenuItemExists() throws Exception {
+        MenuItemRequest item = MenuItemRequest.builder()
+                .name("Test name 17")
+                .description("Test update menu item id 17")
+                .price(10.0)
                 .imageUrl("https://abc.com.vn")
                 .type("")
                 .build();
-        mockMvc.perform(MockMvcRequestBuilders.put("/menu-items/2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/menu-items/17")
                         .content(Helper.toJSON(item))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Test update menu item by id will return 400 when menu url is invalid")
+    public void testUpdateMenuItem_400_IfImgUrlInvalid() throws Exception {
+        MenuItemRequest item = MenuItemRequest.builder()
+                .name("Test name 17")
+                .description("Test update menu item id 17")
+                .price(10.0)
+                .imageUrl("https:// abc.com.vn")
+                .type("")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/menu-items/17")
+                        .content(Helper.toJSON(item))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Test update menu item by id will return 404 when the menu item is not exist in database")
+    public void testUpdateMenuItem_404_IfMenuItemNotExists() throws Exception {
+        MenuItemRequest item = MenuItemRequest.builder()
+                .name("Test name 17")
+                .description("Test update menu item id 17")
+                .price(10.0)
+                .imageUrl("https://abc.com.vn")
+                .type("")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/menu-items/1007")
+                        .content(Helper.toJSON(item))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Test delete menu item with un exist id will pass when menu item not exist in database")
+    public void testDeleteMenuItem_20_IfMenuItemExists() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/menu-items/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -83,10 +154,10 @@ class MenuItemControllerTest {
 
     @Test
     @DisplayName("Test delete menu item with un exist id will pass when menu item not exist in database")
-    public void testDeleteMenuItem_Pass_IfMenuItemExists() throws Exception {
+    public void testDeleteMenuItem_Pass_IfMenuItemNotExists() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/menu-items/1000")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 

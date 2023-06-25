@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The responsibility of this class is to configure swagger
+ * This is an important part of write the API specification document
+ */
 @Configuration
 public class SwaggerConfig {
     @Bean
@@ -20,10 +24,10 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .servers(servers)
                 .info(new Info().title("Restaurant Management Application API")
-                        .description("Sample OpenAPI 3.0")
+                        .description("Restful API for Restaurant Management Application")
                         .contact(new Contact()
                                 .email("tramhuuduc.vn@gmail.com")
-                                .name("Duc 🥰"))
+                                .name("Duc Tram Huu"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("http://www.apache.org/licenses/LICENSE-2.0.html"))

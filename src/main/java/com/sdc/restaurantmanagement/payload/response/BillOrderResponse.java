@@ -22,15 +22,16 @@ public class BillOrderResponse {
     private Long id;
     private Date createTime;
     private Date orderTime;
+    private boolean isPaid;
     private List<BillMenuItemResponse> items;
 
-    private Double total;
+    private Double totalPrice;
 
     public void calculateTotal(){
         if(items == null) {
             return;
         }
-        this.total = this.items.stream().map(item->item.getMenuItem().getPrice()).reduce(0.0, Double::sum);
+        this.totalPrice = this.items.stream().map(item -> item.getNumber() * item.getMenuItem().getPrice()).reduce(0.0, Double::sum);
     }
 
     public static BillOrderResponse fromEntity(BillOrder entity){
@@ -38,7 +39,8 @@ public class BillOrderResponse {
                 .id(entity.getId())
                 .createTime(entity.getCreateTime())
                 .orderTime(entity.getOrderTime())
-                .items(entity.getItems().stream().map(BillMenuItemResponse::fromEntity).collect(Collectors.toList()))
+                .items(entity.getItems().stream().filter(item->!item.isDeleted()).map(BillMenuItemResponse::fromEntity).collect(Collectors.toList()))
+                .isPaid(entity.isPaid())
                 .build();
 
         response.calculateTotal();

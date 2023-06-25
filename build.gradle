@@ -36,6 +36,8 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-core
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-core', version: '1.1.49'
+	// https://mvnrepository.com/artifact/log4j/log4j
+	implementation group: 'log4j', name: 'log4j', version: '1.2.17'
 }
 
 tasks.named('test') {

@@ -1,5 +1,6 @@
 package com.sdc.restaurantmanagement.service.impl;
 
+import com.sdc.restaurantmanagement.constant.Constant;
 import com.sdc.restaurantmanagement.entity.MenuItem;
 import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
@@ -14,6 +15,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+/**
+ * Handle logic for all features of menu items that mean:
+ * <p>get all menu items</p>
+ * <p>add/update/delete a menu items to menu</p>
+ * <p>search items in menu</p>
+ */
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
     @Autowired
@@ -73,7 +80,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void update(Long id, MenuItemRequest request) throws MalformedURLException, NoSuchElementException {
         MenuItem item = menuItemRepository.findById(id).orElse(null);
         if (item == null || item.isDeleted()) {
-            throw new NoSuchElementException("Can't find the menu item with id " + id);
+            throw new NoSuchElementException(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + id);
         }
 
         item.setName(request.getName());
@@ -92,7 +99,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void delete(Long id) {
         MenuItem item = menuItemRepository.findById(id).orElse(null);
         if (item == null) {
-            throw new NoSuchElementException("Can't find the menu item with id " + id);
+            throw new NoSuchElementException(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + id);
         }
         item.setDeleted(true);
         menuItemRepository.save(item);

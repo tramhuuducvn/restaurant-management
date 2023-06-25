@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -16,13 +18,14 @@ class MenuItemRepositoryTest {
     private MenuItemRepository repository;
 
     @Test
-    void testFindAllByIsDeleted() {
-
+    void testFindAllByIsDeleted_3_IfFoundThreeItemDeleted() {
+        List<MenuItem> items = repository.findAllByIsDeleted(true);
+        Assertions.assertEquals(3, items.size());
     }
 
     @Test
     void testFindByIdAndIsDeletedFalse_NotNull_IfItemFound() {
-        MenuItem item = repository.findByIdAndIsDeletedFalse(12L).orElse(null);
+        MenuItem item = repository.findByIdAndIsDeletedFalse(1L).orElse(null);
         Assertions.assertNotNull(item);
     }
 
@@ -33,7 +36,14 @@ class MenuItemRepositoryTest {
     }
 
     @Test
-    void testSearch() {
+    void testSearchByName_One_ResultSizeIsOne() {
+        List<MenuItem> items = repository.search("Pizza", "", "");
+        Assertions.assertEquals(1, items.size());
+    }
 
+    @Test
+    void testSearchByDescription_Two_ResultSizeIsOne() {
+        List<MenuItem> items = repository.search("", "ea", "");
+        Assertions.assertEquals(3, items.size());
     }
 }

@@ -25,8 +25,7 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
      @Query("select item from MenuItem item where " +
             "item.name like %:name% and " +
             "item.description like %:description% and " +
-            "item.type like %:type%")
-
+            "item.type like %:type% and item.isDeleted = false")
      List<MenuItem> search(
              @Param("name") String name,
              @Param("description") String description,

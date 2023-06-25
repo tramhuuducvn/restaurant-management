@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.List;
+
 public class Helper {
     /**
      * Validate URL
@@ -21,6 +23,11 @@ public class Helper {
      * @return json data under string type
      */
     public static String toJSON(Object obj) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(obj);
+    }
+
+    public static String toJSON(List<Object> obj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(obj);
     }

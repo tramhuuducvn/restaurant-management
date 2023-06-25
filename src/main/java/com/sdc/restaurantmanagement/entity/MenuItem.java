@@ -32,6 +32,7 @@ public class MenuItem {
     private Long id;
     private String name;
     private String description;
+    @Column(nullable = false)
     private Double price;
     private String imageUrl;
     private String type;
@@ -40,9 +41,16 @@ public class MenuItem {
     private boolean isDeleted;
 
     public void setImageUrl(String imageUrl) throws MalformedURLException {
-        if(!Helper.isValidURL(imageUrl)){
+        if (!Helper.isValidURL(imageUrl)) {
             throw new MalformedURLException("Image URL is not valid");
         }
         this.imageUrl = imageUrl;
+    }
+
+    public Double getPrice() {
+        if (this.price == null) {
+            return 0.0;
+        }
+        return this.price;
     }
 }

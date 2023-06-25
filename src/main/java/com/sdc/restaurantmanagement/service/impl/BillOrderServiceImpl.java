@@ -1,5 +1,6 @@
 package com.sdc.restaurantmanagement.service.impl;
 
+import com.sdc.restaurantmanagement.constant.Constant;
 import com.sdc.restaurantmanagement.entity.BillMenuItem;
 import com.sdc.restaurantmanagement.entity.BillOrder;
 import com.sdc.restaurantmanagement.entity.MenuItem;
@@ -19,6 +20,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+/**
+ * Handle logic for all features of bill order that mean:
+ * <p>get all bill orders</p>
+ * <p>create a bill order</p>
+ * <p>add a menu item to bill order</p>
+ * <p>remove a menu item from bill order</p>
+ * <p>update quantity for menu item in bill order</p>
+ */
 @Service
 public class BillOrderServiceImpl implements BillOrderService {
 
@@ -30,6 +39,17 @@ public class BillOrderServiceImpl implements BillOrderService {
 
     @Autowired
     BillMenuItemRepository billMenuItemRepository;
+
+    private void checkIsPaid(Long id) throws Exception {
+        BillOrder billOrder = billOrderRepository.findById(id).orElse(null);
+        if(billOrder == null) {
+            throw new NoSuchElementException(Constant.NO_BILL_ORDER_WITH_ID + id);
+        }
+
+        if(billOrder.isPaid()) {
+            throw new AlreadyExistException("This bill has been paid and exported, you can't update or export more one time");
+        }
+    }
 
     /**
      * Get all bill orders
@@ -52,9 +72,8 @@ public class BillOrderServiceImpl implements BillOrderService {
     public BillOrderResponse getById(Long id) {
         BillOrder billOrder = billOrderRepository.findById(id).orElse(null);
         if (billOrder == null) {
-            throw new NoSuchElementException("Can't find the bill order with " + id);
+            throw new NoSuchElementException(Constant.NOT_FOUND_THE_BILL_ORDER_WITH_ID + id);
         }
-
         return BillOrderResponse.fromEntity(billOrder);
     }
 
@@ -66,7 +85,7 @@ public class BillOrderServiceImpl implements BillOrderService {
      */
     @Override
     public BillOrderResponse create(List<BillMenuItemRequest> items) {
-        BillOrder billOrder = billOrderRepository.saveAndFlush(BillOrder.builder().createTime(new Date()).build());
+        BillOrder billOrder = billOrderRepository.save(BillOrder.builder().createTime(new Date()).build());
 
         List<BillMenuItem> list = new ArrayList<>();
         if (!items.isEmpty()) {
@@ -89,13 +108,12 @@ public class BillOrderServiceImpl implements BillOrderService {
      *
      * @param id      id of bill order
      * @param request request param contain menu_item_id and number want to add
+     * @return
      */
     @Override
-    public void addBillMenuItem(Long id, BillMenuItemRequest request) {
+    public void addBillMenuItem(Long id, BillMenuItemRequest request) throws Exception {
+        this.checkIsPaid(id);
         BillOrder billOrder = billOrderRepository.findById(id).orElse(null);
-        if (billOrder == null) {
-            throw new NoSuchElementException("There is no bill with id " + id);
-        }
 
         MenuItem menuItem = menuItemService.getById(request.getMenuItemId()).toEntity();
         if (menuItem == null || menuItem.isDeleted()) {
@@ -104,8 +122,17 @@ public class BillOrderServiceImpl implements BillOrderService {
 
         BillMenuItem billMenuItem = billMenuItemRepository.findByBillOrderIdAndMenuItemId(id, request.getMenuItemId()).orElse(null);
 
+
         if (billMenuItem != null) {
-            throw new AlreadyExistException("This menu item already exists in your bill, you can update it's quantities");
+            if(billMenuItem.isDeleted()){
+                billMenuItem.setDeleted(false);
+                billMenuItem.setNumber(request.getNumber());
+                billMenuItemRepository.save(billMenuItem);
+                return;
+            }
+            else {
+                throw new AlreadyExistException("This menu item already exists in your bill, you can update it's quantities");
+            }
         }
 
         billMenuItemRepository.save(BillMenuItem.builder().number(request.getNumber()).menuItem(menuItem).billOrder(billOrder).build());
@@ -119,10 +146,11 @@ public class BillOrderServiceImpl implements BillOrderService {
      * @param request request param contain menu_item_id and number want to update
      */
     @Override
-    public void updateMenuItemQuantity(Long id, BillMenuItemRequest request) {
+    public void updateMenuItemQuantity(Long id, BillMenuItemRequest request) throws Exception {
+        this.checkIsPaid(id);
         BillOrder billOrder = billOrderRepository.findById(id).orElse(null);
         if (billOrder == null) {
-            throw new NoSuchElementException("There are no bill with id " + id);
+            throw new NoSuchElementException(Constant.NO_BILL_ORDER_WITH_ID + id);
         }
 
         MenuItem menuItem = menuItemService.getById(request.getMenuItemId()).toEntity();
@@ -133,7 +161,7 @@ public class BillOrderServiceImpl implements BillOrderService {
         BillMenuItem billMenuItem = billMenuItemRepository.findByBillOrderIdAndMenuItemId(id, request.getMenuItemId()).orElse(null);
 
         if (billMenuItem == null || billMenuItem.isDeleted()) {
-            throw new NoSuchElementException("Can't find the menu item with id " + request.getMenuItemId() + " in this bill order");
+            throw new NoSuchElementException(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + request.getMenuItemId() + " in this bill order");
         }
         billMenuItem.setNumber(request.getNumber());
         billMenuItemRepository.save(billMenuItem);
@@ -145,7 +173,17 @@ public class BillOrderServiceImpl implements BillOrderService {
      * @param menuItemId id of menu item want to remove
      */
     @Override
-    public void removeBillMenuItem(Long billId, Long menuItemId) {
+    public void removeBillMenuItem(Long billId, Long menuItemId) throws Exception {
         billMenuItemRepository.softDeleteByBillOrderIdAndMenuItemId(billId, menuItemId);
+    }
+
+    /**
+     * paid and export bill order
+     * @param id id of bill order
+     */
+    @Override
+    public void payBillOrder(Long id) throws Exception {
+        this.checkIsPaid(id);
+        billOrderRepository.payBillOrder(id);
     }
 }

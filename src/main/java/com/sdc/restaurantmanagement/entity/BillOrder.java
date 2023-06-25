@@ -1,5 +1,6 @@
 package com.sdc.restaurantmanagement.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Data;
 import lombok.Setter;
@@ -32,10 +33,13 @@ import javax.persistence.CascadeType;
 public class BillOrder {
     @Id
     @GeneratedValue
+    @Schema(name = "Bill Order ID")
     private Long id;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createTime;
     private Date orderTime;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isPaid;
 
     @OneToMany(targetEntity = BillMenuItem.class, mappedBy = "billOrder",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude

@@ -18,4 +18,8 @@ public interface BillMenuItemRepository extends JpaRepository<BillMenuItem, Long
     @Modifying
     @Query(value = "update bill_menu_item item set item.is_deleted = true where item.bill_order_id = :bill_order_id and item.menu_item_id = :menu_item_id", nativeQuery = true)
     void softDeleteByBillOrderIdAndMenuItemId(@Param("bill_order_id") Long billId, @Param("menu_item_id") Long menuItemId);
+
+    @Modifying
+    @Query(value = "update bill_menu_item item set item.is_deleted = false where item.bill_order_id = :bill_order_id and item.menu_item_id = :menu_item_id", nativeQuery = true)
+    void unSoftDeleteByBillOrderIdAndMenuItemId(@Param("bill_order_id") Long billId, @Param("menu_item_id") Long menuItemId);
 }
