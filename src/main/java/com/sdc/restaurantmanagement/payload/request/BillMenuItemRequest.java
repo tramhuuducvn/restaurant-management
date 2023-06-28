@@ -1,6 +1,5 @@
 package com.sdc.restaurantmanagement.payload.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

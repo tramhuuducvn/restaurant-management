@@ -24,7 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
-
 @ExtendWith(SpringExtension.class)
 class BillOrderServiceImplTest {
     @TestConfiguration
@@ -55,7 +54,6 @@ class BillOrderServiceImplTest {
     @MockBean
     private BillMenuItemRepository billMenuItemRepository;
 
-
     @Test
     void testGetAll_ListBillOrder_GetListBillOrderSuccess() {
         List<BillOrder> billOrders = new ArrayList<>();
@@ -68,7 +66,8 @@ class BillOrderServiceImplTest {
 
     @Test
     void testGetById_NotNull_IfItemFound() {
-        Mockito.when(billOrderRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(BillOrder.builder().items(new ArrayList<>()).build()));
+        Mockito.when(billOrderRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(BillOrder.builder().items(new ArrayList<>()).build()));
         BillOrderResponse bill = billOrderService.getById(Mockito.anyLong());
 
         Assertions.assertNotNull(bill);
@@ -96,9 +95,12 @@ class BillOrderServiceImplTest {
 
         Mockito.when(billOrderRepository.save(Mockito.any())).thenReturn(billOrder);
 
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(1L)).thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(2L)).thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(3L)).thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(1L))
+                .thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(2L))
+                .thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(3L))
+                .thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
 
         BillOrderResponse billOrderResponse = billOrderService.create(items);
 
@@ -117,9 +119,11 @@ class BillOrderServiceImplTest {
 
         Mockito.when(billOrderRepository.save(Mockito.any())).thenReturn(billOrder);
 
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(1L)).thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(1L))
+                .thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
         Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(2L)).thenReturn(Optional.empty());
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(3L)).thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(3L))
+                .thenReturn(Optional.of(MenuItem.builder().price(1.0).isDeleted(false).build()));
 
         Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
             BillOrderResponse billOrderResponse = billOrderService.create(items);
@@ -130,14 +134,16 @@ class BillOrderServiceImplTest {
 
     @Test
     void testAddBillMenuItem_NoSuchElementException_IfBillAndMenuItemNotFound() {
-//        BillOrder billOrder = BillOrder.builder().id(10L).createTime(new Date()).build();
+        // BillOrder billOrder = BillOrder.builder().id(10L).createTime(new
+        // Date()).build();
 
         Mockito.when(billOrderRepository.findById(10L)).thenReturn(Optional.empty());
 
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L)).thenReturn(Optional.of(MenuItem.builder().build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L))
+                .thenReturn(Optional.of(MenuItem.builder().build()));
 
-        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L)).thenReturn(Optional.of(BillMenuItem.builder().build()));
-
+        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L))
+                .thenReturn(Optional.of(BillMenuItem.builder().build()));
 
         Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
             billOrderService.addBillMenuItem(10L, new BillMenuItemRequest(1L, 5));
@@ -151,21 +157,25 @@ class BillOrderServiceImplTest {
         BillOrder billOrder = BillOrder.builder().id(10L).isPaid(false).createTime(new Date()).build();
 
         Mockito.when(billOrderRepository.findById(10L)).thenReturn(Optional.of(billOrder));
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L)).thenReturn(Optional.of(MenuItem.builder().build()));
-        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L)).thenReturn(Optional.of(BillMenuItem.builder().build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L))
+                .thenReturn(Optional.of(MenuItem.builder().build()));
+        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L))
+                .thenReturn(Optional.of(BillMenuItem.builder().build()));
 
         Exception exception = Assertions.assertThrows(AlreadyExistException.class, () -> {
             billOrderService.addBillMenuItem(10L, new BillMenuItemRequest(4L, 5));
         });
 
-        Assertions.assertEquals("This menu item already exists in your bill, you can update it's quantities", exception.getMessage());
+        Assertions.assertEquals(Constant.ITEM_ALREADY_EXIST_IN_BILL, exception.getMessage());
     }
 
     @Test
     void testUpdateMenuItemQuantity_NoSuchElementException_IfBillOrderNotFound() {
         Mockito.when(billOrderRepository.findById(10L)).thenReturn(Optional.empty());
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L)).thenReturn(Optional.of(MenuItem.builder().build()));
-        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L)).thenReturn(Optional.of(BillMenuItem.builder().build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L))
+                .thenReturn(Optional.of(MenuItem.builder().build()));
+        Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L))
+                .thenReturn(Optional.of(BillMenuItem.builder().build()));
 
         Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
             billOrderService.updateMenuItemQuantity(10L, new BillMenuItemRequest(1L, 5));
@@ -179,7 +189,8 @@ class BillOrderServiceImplTest {
         BillOrder billOrder = BillOrder.builder().id(10L).createTime(new Date()).build();
 
         Mockito.when(billOrderRepository.findById(10L)).thenReturn(Optional.of(billOrder));
-        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L)).thenReturn(Optional.of(MenuItem.builder().build()));
+        Mockito.when(menuItemRepository.findByIdAndIsDeletedFalse(4L))
+                .thenReturn(Optional.of(MenuItem.builder().build()));
         Mockito.when(billMenuItemRepository.findByBillOrderIdAndMenuItemId(10L, 4L)).thenReturn(Optional.empty());
 
         Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
@@ -209,6 +220,7 @@ class BillOrderServiceImplTest {
             billOrderService.payBillOrder(10L);
         });
 
-        Assertions.assertEquals("This bill has been paid and exported, you can't update or export more one time", exception.getMessage());
+        Assertions.assertEquals("This bill has been paid and exported, you can't update or export more one time",
+                exception.getMessage());
     }
 }

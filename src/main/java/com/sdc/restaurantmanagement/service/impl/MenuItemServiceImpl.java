@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
     @Autowired
-    private MenuItemRepository menuItemRepository;
+    private MenuItemRepository repository;
 
     /**
      * Get all menu item in database
@@ -35,7 +35,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuResponse getAll() {
-        List<MenuItemResponse> menuItems = menuItemRepository
+        List<MenuItemResponse> menuItems = repository
                 .findAllByIsDeletedFalse()
                 .stream()
                 .map(MenuItemResponse::fromEntity)
@@ -51,13 +51,14 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     /**
      * Get menu items in database
+     * 
      * @param page page index
      * @param size number item of each page
      * @return list of {size} menu items at page {page}
      */
     @Override
-    public  MenuResponse getByPage(int page, int size){
-        Page<MenuItem> menuItemPage = menuItemRepository
+    public MenuResponse getByPage(int page, int size) {
+        Page<MenuItem> menuItemPage = repository
                 .findAllByIsDeletedFalse(PageRequest.of(page, size));
 
         List<MenuItemResponse> menuItemResponses = menuItemPage.stream()
@@ -80,7 +81,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuItemResponse getById(Long id) {
-        MenuItem menuItem = menuItemRepository.findByIdAndIsDeletedFalse(id).orElse(null);
+        MenuItem menuItem = repository.findByIdAndIsDeletedFalse(id).orElse(null);
         if (menuItem == null) {
             throw new NoSuchElementException("Menu item with id " + id + " doesn't exist!");
         }
@@ -94,7 +95,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      * @return true if create successful, otherwise return false
      */
     public boolean create(MenuItemRequest request) throws MalformedURLException {
-        MenuItem menuItem = menuItemRepository.save(MenuItemRequest.toEntity(request));
+        MenuItem menuItem = repository.save(MenuItemRequest.toEntity(request));
         return menuItem.getName().equals(request.getName());
     }
 
@@ -105,7 +106,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      * @param request new data update to current.
      */
     public void update(Long id, MenuItemRequest request) throws MalformedURLException, NoSuchElementException {
-        MenuItem item = menuItemRepository.findById(id).orElse(null);
+        MenuItem item = repository.findById(id).orElse(null);
         if (item == null || item.isDeleted()) {
             throw new NoSuchElementException(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + id);
         }
@@ -115,7 +116,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         item.setPrice(request.getPrice());
         item.setImageUrl(request.getImageUrl());
         item.setType(request.getType());
-        menuItemRepository.save(item);
+        repository.save(item);
     }
 
     /**
@@ -124,17 +125,25 @@ public class MenuItemServiceImpl implements MenuItemService {
      * @param id id of menu item
      */
     public void delete(Long id) {
-        MenuItem item = menuItemRepository.findById(id).orElse(null);
+        MenuItem item = repository.findById(id).orElse(null);
         if (item == null) {
             throw new NoSuchElementException(Constant.NOT_FOUND_THE_MENU_ITEM_WITH_ID + id);
         }
         item.setDeleted(true);
-        menuItemRepository.save(item);
+        repository.save(item);
     }
 
+    /**
+     * Find menu item by name, by description or by type
+     *
+     * @param name        name of menu item
+     * @param description description of menu item
+     * @param type        additional information
+     * @return list menu item
+     */
     @Override
     public MenuResponse search(String name, String description, String type) {
-        List<MenuItemResponse> result = menuItemRepository.search(name, description, type)
+        List<MenuItemResponse> result = repository.search(name, description, type)
                 .stream().map(MenuItemResponse::fromEntity).collect(Collectors.toList());
 
         return MenuResponse.builder().items(result).totalMenuItem(result.size()).build();

@@ -14,12 +14,18 @@ import javax.transaction.Transactional;
 public interface BillOrderRepository extends JpaRepository<BillOrder, Long> {
     /**
      * Export a bill order, set true to isPaid field and set current to orderedTime
+     * 
      * @param id id of bill order
      */
     @Modifying
     @Query(value = "update bill_order bill set bill.is_paid = true, bill.order_time = CURRENT_TIMESTAMP where bill.id = :id", nativeQuery = true)
     void payBillOrder(@Param("id") Long id);
 
+    /**
+     * Export a bill order with id of bill order
+     * 
+     * @param id id of bill order
+     */
     @Modifying
     @Query(value = "update bill_order bill set bill.is_paid = false, bill.order_time = NULL where bill.id = :id", nativeQuery = true)
     void unPayBillOrder(@Param("id") Long id);

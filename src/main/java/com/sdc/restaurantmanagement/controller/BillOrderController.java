@@ -1,5 +1,6 @@
 package com.sdc.restaurantmanagement.controller;
 
+import com.sdc.restaurantmanagement.exception.AlreadyExistException;
 import com.sdc.restaurantmanagement.payload.APIResponse;
 import com.sdc.restaurantmanagement.payload.request.BillMenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.BillOrderResponse;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Receive request from client related to bill orders like:
@@ -50,7 +52,7 @@ public class BillOrderController {
      */
     @Operation(summary = "Get all bill orders", description = "Show all bill orders information")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @GetMapping(value = "")
     @ResponseStatus(value = HttpStatus.OK)
@@ -67,7 +69,7 @@ public class BillOrderController {
      */
     @Operation(summary = "Get bill order by id", description = "Show detail information of bill order with the given id")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
@@ -79,17 +81,18 @@ public class BillOrderController {
 
     /**
      * Create bill order with the given menu items
+     * 
      * @param items list menu item want to add to the bill
      * @return return 201 code
      */
     @Operation(summary = "Create a bill order", description = "Create a bill order with the given information")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ResponseBody
-    public APIResponse create(@RequestBody(required = false) List<BillMenuItemRequest> items) {
+    public APIResponse create(@RequestBody List<BillMenuItemRequest> items) {
         return APIResponse.builder().message("Create bill success").data(billOrderService.create(items)).build();
     }
 
@@ -97,17 +100,19 @@ public class BillOrderController {
      * Add Menu Item to bill
      *
      * @param id      id of bill order
-     * @param request an object include id of menu item and number of that item want to add
+     * @param request an object include id of menu item and number of that item want
+     *                to add
      * @return success response message
      */
     @Operation(summary = "Add menu item to a bill order", description = "Add a menu item to a given bill order")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @PutMapping(value = "/{id}/add")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     @ResponseBody
-    public APIResponse addMenuItem(@PathVariable Long id, @RequestBody BillMenuItemRequest request) throws Exception {
+    public APIResponse addMenuItem(@PathVariable Long id, @RequestBody BillMenuItemRequest request)
+            throws NoSuchElementException, AlreadyExistException {
         billOrderService.addBillMenuItem(id, request);
         return APIResponse.builder().message("Add item to bill success").build();
     }
@@ -116,24 +121,34 @@ public class BillOrderController {
      * Update quantity of Menu Item to bill
      *
      * @param id      id of bill order
-     * @param request an object include id of menu item and number of that item want to update
+     * @param request an object include id of menu item and number of that item want
+     *                to update
      * @return success response message
      */
     @Operation(summary = "Update quantity of menu item to a bill order", description = "Change quantity of a menu item in the given bill and save it to the database")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @PutMapping(value = "/{id}/update-quantity")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     @ResponseBody
-    public APIResponse updateMenuItemQuantity(@PathVariable Long id, @RequestBody BillMenuItemRequest request) throws Exception {
+    public APIResponse updateMenuItemQuantity(@PathVariable Long id, @RequestBody BillMenuItemRequest request)
+            throws Exception {
         billOrderService.updateMenuItemQuantity(id, request);
         return APIResponse.builder().message("Update successful").build();
     }
 
+    /**
+     * Soft Delete bill menu item
+     * 
+     * @param billId     id of bill order
+     * @param menuItemId id of menu item
+     * @return 204 No Content
+     * @throws Exception
+     */
     @Operation(summary = "Remove a menu item from a bill order", description = "Remove(soft delete) a menu item in the given bill")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @DeleteMapping(value = "/{billId}/{menuItemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -142,13 +157,20 @@ public class BillOrderController {
         return APIResponse.builder().message("Delete successful").build();
     }
 
+    /**
+     * Mark a bill order is paid, in other words is that bill order was exported
+     * 
+     * @param id id of bill order
+     * @return 202 - ACCEPTED
+     * @throws Exception
+     */
     @Operation(summary = "Pay a bill order", description = "Pay & Export a bill order")
     @ApiResponses(value = {
-            @ApiResponse(content = @Content(array = @ArraySchema( schema = @Schema(implementation = APIResponse.class))))
+            @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))))
     })
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "/{id}/pay-bill-order")
-    public APIResponse payBillOrder(@PathVariable Long id) throws Exception {
+    public APIResponse payBillOrder(@PathVariable Long id) throws AlreadyExistException, NoSuchElementException {
         billOrderService.payBillOrder(id);
         return APIResponse.builder().message("Bill order is paid successful").build();
     }

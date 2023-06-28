@@ -38,7 +38,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public APIResponse catchAllException(Exception exception) {
+    public APIResponse handleAllUncaughtException(Exception exception) {
         return this.handleException(exception);
     }
 
@@ -61,7 +61,7 @@ public class ApiExceptionHandler {
      * @return ERROR Response to client.
      */
     @ExceptionHandler({ InvalidFormatException.class, HttpMessageNotReadableException.class,
-            MalformedURLException.class })
+            MalformedURLException.class, MissingItemException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public APIResponse handleInvalidFormatException(Exception exception) {
         return this.handleException(exception);

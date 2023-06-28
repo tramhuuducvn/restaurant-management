@@ -6,4 +6,6 @@ public class Constant {
     public static final String NO_BILL_ORDER_WITH_ID = "There is no bill order with id ";
 
     public static final String INVALID_URL_EXCEPTION = "Image URL is invalid";
+
+    public static final String ITEM_ALREADY_EXIST_IN_BILL = "This menu item already exists in your bill, you can update its quantities";
 }

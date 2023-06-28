@@ -1,10 +1,12 @@
 package com.sdc.restaurantmanagement.service;
 
+import com.sdc.restaurantmanagement.exception.AlreadyExistException;
 import com.sdc.restaurantmanagement.payload.request.BillMenuItemRequest;
 import com.sdc.restaurantmanagement.payload.response.BillOrderResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Handle logic for all features of bill order that mean:
@@ -18,12 +20,14 @@ import java.util.List;
 public interface BillOrderService {
     /**
      * Get all bill orders
+     * 
      * @return list bill orders
      */
     List<BillOrderResponse> getAll();
 
     /**
      * Get bill order by id
+     * 
      * @param id id of bill order
      * @return bill order
      */
@@ -31,6 +35,7 @@ public interface BillOrderService {
 
     /**
      * Create bill order with the given menu items
+     * 
      * @param items list menu items
      * @return created bill order data
      */
@@ -43,7 +48,7 @@ public interface BillOrderService {
      * @param request request param contain menu_item_id and number want to add
      * @return
      */
-    void addBillMenuItem(Long id, BillMenuItemRequest request) throws Exception;
+    void addBillMenuItem(Long id, BillMenuItemRequest request) throws NoSuchElementException, AlreadyExistException;
 
     /**
      * Update quantity of item to bill id
@@ -55,14 +60,16 @@ public interface BillOrderService {
 
     /**
      * Remove Menu Item from bill order
-     * @param billId id of bill order
+     * 
+     * @param billId     id of bill order
      * @param menuItemId id of menu item want to remove
      */
     void removeBillMenuItem(Long billId, Long menuItemId) throws Exception;
 
     /**
      * paid and export bill order
+     * 
      * @param id id of bill order
      */
-    void payBillOrder(Long id) throws Exception;
+    void payBillOrder(Long id) throws AlreadyExistException, NoSuchElementException;
 }

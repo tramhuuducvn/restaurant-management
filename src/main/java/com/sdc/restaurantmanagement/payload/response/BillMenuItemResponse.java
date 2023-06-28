@@ -2,7 +2,13 @@ package com.sdc.restaurantmanagement.payload.response;
 
 import com.sdc.restaurantmanagement.entity.BillMenuItem;
 import com.sdc.restaurantmanagement.entity.MenuItem;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @Getter

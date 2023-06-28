@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class MenuItemRepositoryTest {
@@ -19,7 +18,7 @@ class MenuItemRepositoryTest {
 
     @Test
     void testFindByIdAndIsDeletedFalse_NotNull_IfItemFound() {
-        MenuItem item = repository.findByIdAndIsDeletedFalse(1L).orElse(null);
+        MenuItem item = repository.findByIdAndIsDeletedFalse(15L).orElse(null);
         Assertions.assertNotNull(item);
     }
 
@@ -44,6 +43,6 @@ class MenuItemRepositoryTest {
     @Test
     void testFindAllByIsDeletedFalse() {
         List<MenuItem> items = repository.findAllByIsDeletedFalse();
-        Assertions.assertEquals(19, items.size());
+        Assertions.assertEquals(64, items.size());
     }
 }

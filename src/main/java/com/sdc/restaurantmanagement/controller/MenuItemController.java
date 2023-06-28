@@ -1,6 +1,5 @@
 package com.sdc.restaurantmanagement.controller;
 
-import com.sdc.restaurantmanagement.entity.MenuItem;
 import com.sdc.restaurantmanagement.payload.APIResponse;
 import com.sdc.restaurantmanagement.payload.response.MenuItemResponse;
 import com.sdc.restaurantmanagement.payload.request.MenuItemRequest;
@@ -82,10 +81,9 @@ public class MenuItemController {
             @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = APIResponse.class))), responseCode = "200"),
     })
     @PostMapping(value = "")
-    @ResponseStatus(HttpStatus.CREATED)
-    public APIResponse create(@RequestBody MenuItemRequest request) throws MalformedURLException {
+    public ResponseEntity<APIResponse> create(@RequestBody MenuItemRequest request) throws MalformedURLException {
         menuItemService.create(request);
-        return APIResponse.builder().message("Create menu item successful").build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(APIResponse.builder().message("Create menu item successful").build());
     }
 
     /**
