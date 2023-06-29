@@ -1,11 +1,11 @@
 version: "3"
 services:
-  restaurant-management-container:
-    image: restaurant-management-app
+  restaurant-container:
+    image: restaurant_app
     ports:
       - "8080:8080"
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/restaurant_management_db?useSSL=false
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/restaurant_db?useSSL=false
     networks:
       - restaurant-management-net
     depends_on:
@@ -17,7 +17,7 @@ services:
       - restaurant-management-net
     environment:
       - MYSQL_ROOT_PASSWORD=12345678
-      - MYSQL_DATABASE=restaurant_management_db
+      - MYSQL_DATABASE=restaurant_db
       - MYSQL_USER=tramhuuducvn
       - MYSQL_PASSWORD=12345678
 
