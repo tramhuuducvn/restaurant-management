@@ -1,0 +1,10 @@
+log4j:
+  appender:
+    file: org.apache.log4j.RollingFileAppender
+    file.File: C:\log4j-application.log
+    stdout: org.apache.log4j.ConsoleAppender
+    stdout.Target: System.out
+    stdout.layout: org.apache.log4j.PatternLayout
+    stdout.layout.ConversionPattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L -
+      %m%n"
+  rootLogger: DEBUG, stdout, file

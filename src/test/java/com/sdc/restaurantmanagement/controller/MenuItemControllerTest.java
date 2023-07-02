@@ -117,6 +117,7 @@ class MenuItemControllerTest {
                                 .imageUrl("https://abc.com.vn")
                                 .type("")
                                 .build();
+
                 mockMvc.perform(MockMvcRequestBuilders.put("/menu-items/17")
                                 .content(Helper.toJSON(item))
                                 .contentType(MediaType.APPLICATION_JSON))

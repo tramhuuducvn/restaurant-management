@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = RestaurantManagementApplication.class)
 @TestPropertySource(locations = "classpath:application-integration-test.properties")
@@ -66,8 +65,8 @@ class BillOrderControllerTest {
         items.add(new BillMenuItemRequest(1L, 10));
         items.add(new BillMenuItemRequest(5L, 10));
         mockMvc.perform(MockMvcRequestBuilders.post("/bill-orders")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(items)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(items)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -78,8 +77,8 @@ class BillOrderControllerTest {
         items.add(new BillMenuItemRequest(1L, 10));
         items.add(new BillMenuItemRequest(2L, 10));
         mockMvc.perform(MockMvcRequestBuilders.post("/bill-orders")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(items)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(items)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -90,8 +89,8 @@ class BillOrderControllerTest {
         BillMenuItemRequest item = new BillMenuItemRequest(15L, 10);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/33/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(item)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(item)))
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -101,10 +100,9 @@ class BillOrderControllerTest {
         billMenuItemRepository.unSoftDeleteByBillOrderIdAndMenuItemId(7L, 1L);
         BillMenuItemRequest items = new BillMenuItemRequest(1L, 10);
 
-
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/7/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(items)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(items)))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -114,8 +112,8 @@ class BillOrderControllerTest {
         BillMenuItemRequest item = new BillMenuItemRequest(15L, 10);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/7/update-quantity")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(item)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(item)))
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -125,8 +123,8 @@ class BillOrderControllerTest {
         BillMenuItemRequest item = new BillMenuItemRequest(1050L, 10);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/44/update-quantity")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Helper.toJSON(item)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Helper.toJSON(item)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -134,7 +132,7 @@ class BillOrderControllerTest {
     @Test
     void testDeleteBillMenuItem_NoContent_IfNothing() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/bill-orders/7/2")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -142,7 +140,7 @@ class BillOrderControllerTest {
     @Test
     void testPaidBillOrder_NotFound_IfBillOrderNotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/7009/pay-bill-order")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
@@ -151,7 +149,7 @@ class BillOrderControllerTest {
     void testPaidBillOrder_Accepted_IfBillOrderFound() throws Exception {
         billOrderRepository.unPayBillOrder(37L);
         mockMvc.perform(MockMvcRequestBuilders.put("/bill-orders/37/pay-bill-order")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
